@@ -108,9 +108,9 @@ if (PLAYLIST_ID !== "PLAYLIST_ID_HERE") {
     const plRes = await fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${PLAYLIST_ID}`);
     if (plRes.ok) {
       const plXml = await plRes.text();
-      const match = plXml.match(/<entry>([\s\S]*?)<\/entry>/);
-      if (match) {
-        const e = match[1];
+      const matches = [...plXml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)];
+      if (matches.length > 0) {
+        const e = matches[matches.length - 1][1];
         // 날짜는 영상 업로드일이 아니라 스크립트 실행(업데이트) 날짜로 설정
         const updateDate = new Date();
         const dateStr = new Date(updateDate.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10); // KST 변환

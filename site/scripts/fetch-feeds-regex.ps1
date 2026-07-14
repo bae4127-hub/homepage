@@ -144,7 +144,7 @@ if ($playlistId -ne "PLAYLIST_ID_HERE") {
         $plRssStr = (Invoke-WebRequest -Uri "https://www.youtube.com/feeds/videos.xml?playlist_id=$playlistId" -Headers @{"User-Agent"="Mozilla/5.0"} -UseBasicParsing).Content
         $plMatches = [regex]::Matches($plRssStr, "<entry>([\s\S]*?)</entry>")
         if ($plMatches.Count -gt 0) {
-            $e = $plMatches[0].Groups[1].Value
+            $e = $plMatches[$plMatches.Count - 1].Groups[1].Value
             $videoId = Pick -xml $e -tag "yt:videoId"
             $title = Pick -xml $e -tag "title"
             # 날짜는 영상 업로드일이 아니라 스크립트 실행(업데이트) 날짜로 설정
