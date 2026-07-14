@@ -1,23 +1,20 @@
-/* ============================================================
-   청라강성교회 홈페이지 — 모던 디자인
-   글래스모피즘 + 카드 UI + 스크롤 애니메이션
-   색상 변경: 아래 :root 변수만 수정하면 전체 분위기가 바뀝니다
-   ============================================================ */
+﻿/* ============================================================
+   泥?씪媛뺤꽦援먰쉶 ?덊럹?댁? ??紐⑤뜕 ?붿옄??   湲?섏뒪紐⑦뵾利?+ 移대뱶 UI + ?ㅽ겕濡??좊땲硫붿씠??   ?됱긽 蹂寃? ?꾨옒 :root 蹂?섎쭔 ?섏젙?섎㈃ ?꾩껜 遺꾩쐞湲곌? 諛붾앸땲??   ============================================================ */
 :root {
-  --primary: #1d5c4a;            /* 메인 — 깊은 녹색 [교회 로고 색으로 교체 가능] */
+  --primary: #1d5c4a;            /* 硫붿씤 ??源딆? ?뱀깋 [援먰쉶 濡쒓퀬 ?됱쑝濡?援먯껜 媛?? */
   --primary-deep: #11362c;
   --primary-soft: #2e7a63;
-  --accent: #e3b04b;             /* 포인트 — 따뜻한 금색 */
+  --accent: #e3b04b;             /* ?ъ씤?????곕쑜??湲덉깋 */
   --accent-soft: #f3d489;
   --text: #1f2823;
   --text-light: #5c6962;
-  --bg: #fbfaf7;                 /* 본문 배경 — 따뜻한 화이트 */
+  --bg: #fbfaf7;                 /* 蹂몃Ц 諛곌꼍 ???곕쑜???붿씠??*/
   --bg-alt: #f1efe8;
   --card: rgba(255, 255, 255, 0.72);
   --card-border: rgba(255, 255, 255, 0.55);
-  --shadow-sm: 0 2px 10px rgba(17, 54, 44, 0.06);
-  --shadow-md: 0 10px 30px rgba(17, 54, 44, 0.10);
-  --shadow-lg: 0 24px 60px rgba(17, 54, 44, 0.16);
+  --shadow-sm: 0 2px 10px rgba(6, 21, 54, 0.06);
+  --shadow-md: 0 10px 30px rgba(6, 21, 54, 0.10);
+  --shadow-lg: 0 24px 60px rgba(6, 21, 54, 0.16);
   --radius: 20px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -35,13 +32,13 @@ body {
 a { color: var(--primary); }
 ::selection { background: var(--accent-soft); }
 
-/* ===== 상단 메뉴 — 글래스모피즘 ===== */
+/* ===== ?곷떒 硫붾돱 ??湲?섏뒪紐⑦뵾利?===== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
   background: rgba(251, 250, 247, 0.65);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  border-bottom: 1px solid rgba(29, 92, 74, 0.08);
+  border-bottom: 1px solid rgba(12, 44, 109, 0.08);
 }
 .header-inner { display: flex; justify-content: space-between; align-items: center; height: 100px; }
 .logo {
@@ -63,28 +60,28 @@ a { color: var(--primary); }
 .nav a:hover { color: var(--primary); }
 .nav a:hover::after { transform: scaleX(1); }
 
-/* 상단 메뉴의 "처음 오셨나요?" 고정 버튼 */
+/* ?곷떒 硫붾돱??"泥섏쓬 ?ㅼ뀲?섏슂?" 怨좎젙 踰꾪듉 */
 .nav a.nav-cta {
   color: var(--primary-deep); font-weight: 700;
   background: linear-gradient(135deg, var(--accent-soft), var(--accent));
   padding: 8px 18px; border-radius: 24px;
-  box-shadow: 0 4px 14px rgba(227, 176, 75, 0.35);
+  box-shadow: 0 4px 14px rgba(97, 148, 248, 0.35);
   transition: transform 0.25s var(--ease), box-shadow 0.25s;
 }
 .nav a.nav-cta::after { display: none; }
 .nav a.nav-cta:hover {
   color: var(--primary-deep);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(227, 176, 75, 0.45);
+  box-shadow: 0 8px 20px rgba(97, 148, 248, 0.45);
 }
 
-/* ===== 메인 비주얼 — 성도 단체사진 배경 (images/hero.jpg 교체 시 여기만 수정) ===== */
+/* ===== 硫붿씤 鍮꾩＜?????깅룄 ?⑥껜?ъ쭊 諛곌꼍 (images/hero.jpg 援먯껜 ???ш린留??섏젙) ===== */
 .hero {
   position: relative; overflow: hidden;
-  /* 사진 위에 어두운 녹색막을 덮어 흰 글씨가 잘 읽히게 함.
-     사진이 안 불러와질 때는 맨 뒤의 녹색 그라데이션이 대신 보임 */
+  /* ?ъ쭊 ?꾩뿉 ?대몢???뱀깋留됱쓣 ??뼱 ??湲?④? ???쏀엳寃???
+     ?ъ쭊????遺덈윭?吏??뚮뒗 留??ㅼ쓽 ?뱀깋 洹몃씪?곗씠?섏씠 ???蹂댁엫 */
   background:
-    linear-gradient(rgba(13, 40, 32, 0.60), rgba(13, 40, 32, 0.72)),
+    linear-gradient(rgba(6, 21, 54, 0.60), rgba(6, 21, 54, 0.72)),
     url('images/hero.jpg') center 38% / cover no-repeat,
     linear-gradient(150deg, var(--primary-deep) 0%, var(--primary) 55%, var(--primary-soft) 100%);
   color: #fff; text-align: center;
@@ -126,15 +123,15 @@ a { color: var(--primary); }
   color: var(--primary-deep);
   background: linear-gradient(135deg, var(--accent-soft), var(--accent));
   padding: 15px 42px; border-radius: 40px;
-  box-shadow: 0 10px 28px rgba(227, 176, 75, 0.35);
+  box-shadow: 0 10px 28px rgba(97, 148, 248, 0.35);
   transition: transform 0.25s var(--ease), box-shadow 0.25s;
 }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(227, 176, 75, 0.45); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(97, 148, 248, 0.45); }
 
-/* ===== 행사 고정 배너 ===== */
+/* ===== ?됱궗 怨좎젙 諛곕꼫 ===== */
 .notice-section { margin-top: -56px; position: relative; z-index: 5; }
 .notice-grid { display: grid; gap: 18px; }
-/* 배너가 2개 이상이면 나란히 배치 (좁은 화면에서는 자동으로 세로 쌓임) */
+/* 諛곕꼫媛 2媛??댁긽?대㈃ ?섎???諛곗튂 (醫곸? ?붾㈃?먯꽌???먮룞?쇰줈 ?몃줈 ?볦엫) */
 .notice-grid.notice-multi { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
 .notice-grid.notice-multi .notice-thumb { flex: 0 0 150px; }
 .notice-grid.notice-multi .notice-body { padding: 20px 22px; }
@@ -143,12 +140,12 @@ a { color: var(--primary); }
   display: flex; align-items: stretch; text-decoration: none; color: var(--text);
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(227, 176, 75, 0.45);
+  border: 1px solid rgba(97, 148, 248, 0.45);
   border-radius: var(--radius); overflow: hidden;
   box-shadow: var(--shadow-lg);
   transition: transform 0.3s var(--ease), box-shadow 0.3s;
 }
-.notice-banner:hover { transform: translateY(-4px); box-shadow: 0 28px 70px rgba(17, 54, 44, 0.22); }
+.notice-banner:hover { transform: translateY(-4px); box-shadow: 0 28px 70px rgba(6, 21, 54, 0.22); }
 .notice-thumb { flex: 0 0 240px; position: relative; min-height: 150px; }
 .notice-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .notice-body { padding: 26px 30px; flex: 1; }
@@ -160,8 +157,8 @@ a { color: var(--primary); }
   animation: badge-pulse 2.4s ease-in-out infinite;
 }
 @keyframes badge-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(227, 176, 75, 0.45); }
-  50%      { box-shadow: 0 0 0 8px rgba(227, 176, 75, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(97, 148, 248, 0.45); }
+  50%      { box-shadow: 0 0 0 8px rgba(97, 148, 248, 0); }
 }
 .notice-body h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; margin: 10px 0 6px; color: var(--primary-deep); }
 .notice-body p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 12px; }
@@ -175,11 +172,11 @@ a { color: var(--primary); }
 }
 @media (prefers-reduced-motion: reduce) { .notice-badge { animation: none; } }
 
-/* ===== 공통 섹션 ===== */
+/* ===== 怨듯넻 ?뱀뀡 ===== */
 .section { padding: 96px 0; }
 .section-alt {
   background:
-    radial-gradient(1200px 400px at 80% -10%, rgba(227, 176, 75, 0.07), transparent),
+    radial-gradient(1200px 400px at 80% -10%, rgba(97, 148, 248, 0.07), transparent),
     var(--bg-alt);
 }
 .section h2 {
@@ -196,17 +193,17 @@ a { color: var(--primary); }
 .more-link a {
   display: inline-block; text-decoration: none; font-weight: 600; font-size: 0.95rem;
   color: var(--primary); padding: 11px 26px; border-radius: 30px;
-  background: rgba(29, 92, 74, 0.06); border: 1px solid rgba(29, 92, 74, 0.14);
+  background: rgba(12, 44, 109, 0.06); border: 1px solid rgba(12, 44, 109, 0.14);
   transition: background 0.25s, transform 0.25s var(--ease);
 }
-.more-link a:hover { background: rgba(29, 92, 74, 0.12); transform: translateY(-2px); }
+.more-link a:hover { background: rgba(12, 44, 109, 0.12); transform: translateY(-2px); }
 
-/* ===== 유튜브 영상 ===== */
+/* ===== ?좏뒠釉??곸긽 ===== */
 .video-wrap {
   position: relative; padding-bottom: 56.25%; max-width: 880px; margin: 0 auto;
   border-radius: var(--radius); overflow: hidden;
   box-shadow: var(--shadow-lg);
-  outline: 1px solid rgba(29, 92, 74, 0.08);
+  outline: 1px solid rgba(12, 44, 109, 0.08);
 }
 .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .sermon-thumb-link { display: block; position: absolute; inset: 0; width: 100%; height: 100%; text-decoration: none; overflow: hidden; border-radius: var(--radius); }
@@ -224,7 +221,7 @@ a { color: var(--primary); }
 }
 .sermon-thumb-link:hover .play-icon { transform: scale(1.15); }
 
-/* ===== 블로그 소식 — 글래스 카드 ===== */
+/* ===== 釉붾줈洹??뚯떇 ??湲?섏뒪 移대뱶 ===== */
 .post-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
 .post-card {
   position: relative; display: block; text-decoration: none; color: var(--text);
@@ -237,13 +234,13 @@ a { color: var(--primary); }
   overflow: hidden;
 }
 
-/* 카드 썸네일 — 이미지가 없거나 깨지면 ⛪ 그라데이션 배경이 대신 보임 */
+/* 移대뱶 ?몃꽕?????대?吏媛 ?녾굅??源⑥?硫???洹몃씪?곗씠??諛곌꼍?????蹂댁엫 */
 .post-thumb {
   position: relative; aspect-ratio: 16 / 9; overflow: hidden;
   background: linear-gradient(135deg, var(--primary-soft), var(--primary-deep));
 }
 .post-thumb::before {
-  content: "⛪"; position: absolute; inset: 0;
+  content: "??; position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 2.6rem; opacity: 0.35;
 }
@@ -263,14 +260,14 @@ a { color: var(--primary); }
 .post-card:hover::before { opacity: 1; }
 .post-card .post-cat {
   display: inline-block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em;
-  color: var(--primary); background: rgba(29, 92, 74, 0.08);
+  color: var(--primary); background: rgba(12, 44, 109, 0.08);
   padding: 4px 12px; border-radius: 20px;
 }
 .post-card h3 { font-size: 1.04rem; font-weight: 700; line-height: 1.5; margin: 12px 0 14px; letter-spacing: -0.01em; }
 .post-card time { font-size: 0.82rem; color: var(--text-light); }
 .loading { text-align: center; color: var(--text-light); grid-column: 1 / -1; }
 
-/* ===== 가정예배 · 밤기도회 카드 ===== */
+/* ===== 媛?뺤삁諛?쨌 諛ㅺ린?꾪쉶 移대뱶 ===== */
 .fw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 .fw-card {
   border-radius: var(--radius); padding: 30px;
@@ -282,7 +279,7 @@ a { color: var(--primary); }
 .fw-orange { background: linear-gradient(140deg, #f5a623 0%, #e2701b 100%); }
 .fw-prayer { background: linear-gradient(140deg, #2b3a67 0%, #141d3a 100%); }
 .fw-bible { background: linear-gradient(140deg, #11998e 0%, #38ef7d 100%); }
-.fw-card::after { /* 은은한 빛 장식 */
+.fw-card::after { /* ????鍮??μ떇 */
   content: ""; position: absolute; right: -60px; top: -60px;
   width: 200px; height: 200px; border-radius: 50%;
   background: rgba(255, 255, 255, 0.12); filter: blur(10px);
@@ -308,12 +305,12 @@ a { color: var(--primary); }
 .fw-cta:hover { background: rgba(255, 255, 255, 0.28); }
 .fw-empty { font-size: 0.9rem; opacity: 0.9; line-height: 1.7; }
 
-/* ===== 이웃사랑 카드 — 사진과 글이 나란한 가로형 ===== */
+/* ===== ?댁썐?щ옉 移대뱶 ???ъ쭊怨?湲???섎???媛濡쒗삎 ===== */
 .outreach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; }
 .outreach-card {
   display: flex; align-items: stretch; text-decoration: none; color: var(--text);
   background: linear-gradient(160deg, #fff 0%, #f4f8f3 100%);
-  border: 1px solid rgba(29, 92, 74, 0.10);
+  border: 1px solid rgba(12, 44, 109, 0.10);
   border-radius: var(--radius); overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: transform 0.3s var(--ease), box-shadow 0.3s;
@@ -331,11 +328,11 @@ a { color: var(--primary); }
   .outreach-thumb { flex: none; height: 150px; }
 }
 
-/* ===== 새가족 카드 ===== */
+/* ===== ?덇?議?移대뱶 ===== */
 .welcome-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
 .welcome-card {
   background: linear-gradient(160deg, #fff 0%, #faf7ef 100%);
-  border: 1px solid rgba(29, 92, 74, 0.08);
+  border: 1px solid rgba(12, 44, 109, 0.08);
   border-radius: var(--radius); padding: 30px;
   box-shadow: var(--shadow-sm);
   transition: transform 0.3s var(--ease), box-shadow 0.3s;
@@ -346,12 +343,12 @@ a { color: var(--primary); }
 .welcome-card li { margin-bottom: 8px; }
 .welcome-card li::marker { color: var(--accent); font-weight: 700; }
 
-/* ===== 오시는 길 ===== */
+/* ===== ?ㅼ떆??湲?===== */
 .address { text-align: center; margin-bottom: 26px; font-size: 1.05rem; }
 .map-wrap { max-width: 880px; margin: 0 auto 24px; }
 .map-placeholder {
   background: rgba(255, 255, 255, 0.6);
-  border: 2px dashed rgba(29, 92, 74, 0.2); border-radius: var(--radius);
+  border: 2px dashed rgba(12, 44, 109, 0.2); border-radius: var(--radius);
   height: 340px; display: flex; align-items: center; justify-content: center;
   color: var(--text-light);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
@@ -363,11 +360,11 @@ a.map-placeholder {
 a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(255, 255, 255, 0.85); }
 .transit { max-width: 880px; margin: 0 auto; list-style: none; display: grid; gap: 10px; }
 .transit li {
-  background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(29, 92, 74, 0.07);
+  background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(12, 44, 109, 0.07);
   border-radius: 14px; padding: 13px 20px; box-shadow: var(--shadow-sm);
 }
 
-/* ===== 푸터 ===== */
+/* ===== ?명꽣 ===== */
 .site-footer {
   background: linear-gradient(160deg, var(--primary-deep), var(--primary));
   color: rgba(255, 255, 255, 0.88); text-align: center;
@@ -377,21 +374,21 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
 .site-footer a { color: #fff; font-weight: 600; }
 .footer-links { margin-top: 14px; opacity: 0.92; }
 
-/* ===== 스크롤 등장 애니메이션 (script.js와 연동) ===== */
+/* ===== ?ㅽ겕濡??깆옣 ?좊땲硫붿씠??(script.js? ?곕룞) ===== */
 .reveal {
   opacity: 0; transform: translateY(26px);
   transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
 }
 .reveal.visible { opacity: 1; transform: none; }
 
-/* 모션 최소화 설정 사용자 배려 */
+/* 紐⑥뀡 理쒖냼???ㅼ젙 ?ъ슜??諛곕젮 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .post-card, .welcome-card, .btn-primary, .more-link a { transition: none; }
 }
 
-/* ===== 모바일 ===== */
+/* ===== 紐⑤컮??===== */
 @media (max-width: 640px) {
   .section { padding: 64px 0; }
   .hero { padding: 80px 0 96px; }
@@ -404,14 +401,14 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   .hero-info span { padding: 7px 14px; font-size: 0.86rem; }
 }
 
-/* 아주 좁은 화면: 헤더를 2단(로고 / 메뉴 한 줄)으로 — 메뉴 4개가 항상 모두 보임 */
+/* ?꾩＜ 醫곸? ?붾㈃: ?ㅻ뜑瑜?2??濡쒓퀬 / 硫붾돱 ??以??쇰줈 ??硫붾돱 4媛쒓? ??긽 紐⑤몢 蹂댁엫 */
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
   .header-inner {
     flex-wrap: wrap; height: auto; padding: 10px 0 12px;
     justify-content: center; row-gap: 8px;
   }
-  /* 메뉴 4개를 2×2 버튼 격자로 — 글자 크기와 상관없이 절대 잘리지 않음 */
+  /* 硫붾돱 4媛쒕? 2횞2 踰꾪듉 寃⑹옄濡???湲???ш린? ?곴??놁씠 ?덈? ?섎━吏 ?딆쓬 */
   .nav {
     width: 100%; display: grid; grid-template-columns: 1fr 1fr;
     gap: 6px 10px; white-space: nowrap;
@@ -419,12 +416,12 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   .nav a {
     margin-left: 0; font-size: 0.88rem; text-align: center;
     padding: 7px 0; border-radius: 10px;
-    background: rgba(29, 92, 74, 0.06);
+    background: rgba(12, 44, 109, 0.06);
   }
-  /* "처음 오셨나요?" 버튼은 한 줄 전체를 차지해 가장 눈에 띄게 */
+  /* "泥섏쓬 ?ㅼ뀲?섏슂?" 踰꾪듉? ??以??꾩껜瑜?李⑥???媛???덉뿉 ?꾧쾶 */
 }
 
-/* ===== 팝업(모달) 배너 ===== */
+/* ===== ?앹뾽(紐⑤떖) 諛곕꼫 ===== */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 9999;
   background: rgba(0, 0, 0, 0.6);
@@ -469,7 +466,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   font-weight: 600; cursor: pointer; padding: 4px;
 }
 
-/* ===== 교회 비전 및 가치 (Vision Section) ===== */
+/* ===== 援먰쉶 鍮꾩쟾 諛?媛移?(Vision Section) ===== */
 .vision-section {
   background: var(--bg-light);
   padding: 80px 0;
@@ -486,7 +483,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   }
 }
 
-/* 로고 설명 카드 */
+/* 濡쒓퀬 ?ㅻ챸 移대뱶 */
 .vision-logo-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -522,7 +519,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   word-break: keep-all;
 }
 
-/* 색상 배지 */
+/* ?됱긽 諛곗? */
 .color-badges {
   display: flex;
   flex-wrap: wrap;
@@ -558,7 +555,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
 .c-green { background: #2ecc71; color: #fff; }
 .c-green::before { background: #2ecc71; }
 
-/* 5대 가치 그리드 */
+/* 5? 媛移?洹몃━??*/
 .core-values-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -579,7 +576,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(29, 92, 74, 0.03) 0%, rgba(29, 92, 74, 0) 100%);
+  background: linear-gradient(135deg, rgba(12, 44, 109, 0.03) 0%, rgba(12, 44, 109, 0) 100%);
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s;
@@ -587,7 +584,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
 .value-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(29, 92, 74, 0.2);
+  border-color: rgba(12, 44, 109, 0.2);
 }
 .value-card:hover::before {
   opacity: 1;
@@ -614,7 +611,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--primary);
-  background: rgba(29, 92, 74, 0.1);
+  background: rgba(12, 44, 109, 0.1);
   padding: 3px 10px;
   border-radius: 20px;
 }
@@ -624,3 +621,4 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   font-size: 0.95rem;
   word-break: keep-all;
 }
+
