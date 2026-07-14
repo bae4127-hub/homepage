@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청라강성교회 | 인천 청라신도시 6단지</title>
+<meta name="description" content="인천 청라신도시(6단지)에 복음을 꽃 피우는 청라강성교회입니다. 대한예수교장로회(합신), 주일예배 오전 11시. 처음 오신 분 환영합니다.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css?v=7">
+</head>
+<body>
+<div id="modal-root"></div>
+
+<!-- ===== 상단 메뉴 ===== -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#" class="logo"><img src="images/logo.png" alt="청라강성교회" style="width: 260px; height: auto; vertical-align: middle; filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.35));"></a>
+    <nav class="nav">
+      <a href="#sermon">예배와 말씀</a>
+      <a href="#news">교회소식</a>
+      <a href="#location">오시는 길</a>
+      <a href="#new-family" class="nav-cta">처음 오셨나요?</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== 메인 비주얼 ===== -->
+<section class="hero">
+  <!-- 배경 사진: images/hero.jpg (성도 단체사진 — 바꾸려면 파일만 교체) -->
+  <div class="container hero-inner">
+    <p class="hero-eyebrow">인천 청라신도시 6단지</p>
+    <h1>청라강성교회</h1>
+    <p class="hero-verse">청라에 복음의 꽃을 피우다</p>
+    <p class="hero-motto">바른신학 · 바른교회 · 바른생활</p>
+    <div class="hero-info">
+      <span>주일예배 <strong>주일 오전 11시</strong></span>
+      <span>매일 선포기도회 <strong>밤 9시</strong></span>
+      <span>인천 서구 청라한내로162번길 4-6, 4층</span>
+    </div>
+    <a href="#new-family" class="btn-primary">처음 오셨나요?</a>
+  </div>
+</section>
+
+<!-- ===== 행사 고정 배너 (data/notice.json으로 관리 — 종료일 지나면 자동 숨김) ===== -->
+<section id="notice" class="notice-section" hidden>
+  <div class="container">
+    <div id="notice-list" class="notice-grid">
+      <!-- script.js가 notice.json(여러 개 가능)을 읽어 배너 카드를 생성 -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== 최신 설교 (유튜브 자동 연동 — 수정 불필요, 항상 최신 영상) ===== -->
+<section id="sermon" class="section">
+  <div class="container">
+    <h2>이번 주 말씀</h2>
+    <p class="section-desc">매주 주일예배 말씀이 자동으로 업데이트됩니다.</p>
+    <div class="video-wrap">
+      <!-- 기본값은 현재 최신 설교. 배포 후에는 script.js가 data/latest-video.json을 읽어
+           매주 자동으로 최신 설교로 교체합니다 (유튜브 업로드 재생목록 임베드는 차단되는 경우가 있어 이 방식 사용) -->
+      <!-- 유튜브 임베드 차단(오류 153 등) 방지를 위해 썸네일 링크 방식으로 변경 -->
+      <a id="sermon-link" href="https://www.youtube.com/watch?v=CFApmeuTqKQ" target="_blank" rel="noopener" class="sermon-thumb-link">
+        <img id="sermon-thumb" src="https://i.ytimg.com/vi/CFApmeuTqKQ/maxresdefault.jpg" alt="청라강성교회 최신 설교" onerror="this.src=this.src.replace('maxresdefault','hqdefault')">
+        <div class="sermon-play-overlay">
+          <svg viewBox="0 0 24 24" class="play-icon" aria-hidden="true">
+            <path fill="currentColor" d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+    <p class="more-link">
+      <a href="https://www.youtube.com/@cnksch" target="_blank" rel="noopener">▶ 지난 설교 전체 보기 (유튜브)</a>
+    </p>
+  </div>
+</section>
+
+<!-- ===== 가정예배 코너 — 블로그에 [오렌지카드]/[선포기도문] 제목으로 올리면 자동 표시 ===== -->
+<section id="family-worship" class="section section-alt">
+  <div class="container">
+    <h2>가정예배 · 밤기도회</h2>
+    <p class="section-desc">가정예배 순서지 '오렌지카드'와 밤기도회 선포기도문이 꾸준히 발행됩니다.</p>
+    <div class="fw-grid">
+      <div id="fw-orange" class="fw-card fw-orange"><!-- script.js가 채움 --></div>
+      <div id="fw-prayer" class="fw-card fw-prayer"><!-- script.js가 채움 --></div>
+      <div id="fw-bible" class="fw-card fw-bible"><!-- script.js가 채움 --></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 교회 소식 (블로그 RSS 자동 연동 — script.js가 채움) ===== -->
+<section id="news" class="section">
+  <div class="container">
+    <h2>교회 소식</h2>
+    <p class="section-desc">교회 블로그의 최신 글이 자동으로 표시됩니다.</p>
+    <div id="blog-posts" class="post-grid">
+      <!-- script.js가 data/posts.json을 읽어 여기에 카드를 생성 -->
+      <p class="loading">소식을 불러오는 중...</p>
+    </div>
+    <p class="more-link">
+      <a href="https://blog.naver.com/wormwood79" target="_blank" rel="noopener">📝 블로그에서 더 보기</a>
+    </p>
+  </div>
+</section>
+
+<!-- ===== 이웃사랑 (data/outreach.json으로 고정 관리) ===== -->
+<section id="outreach" class="section section-alt">
+  <div class="container">
+    <h2>이웃사랑</h2>
+    <p class="section-desc">받은 사랑을 교회 밖 이웃과 나눕니다.</p>
+    <div id="outreach-list" class="outreach-grid">
+      <!-- script.js가 data/outreach.json을 읽어 채움 -->
+    </div>
+    <p class="more-link">
+      <a href="https://blog.naver.com/PostList.naver?blogId=wormwood79&from=postList&categoryNo=21" target="_blank" rel="noopener">💚 이웃사랑 이야기 더 보기</a>
+    </p>
+  </div>
+</section>
+
+<!-- ===== 새가족 안내 ===== -->
+<section id="new-family" class="section">
+  <div class="container">
+    <h2>처음 오신 분 환영합니다</h2>
+    <div class="welcome-grid">
+      <div class="welcome-card">
+        <h3>📌 예배 시간</h3>
+        <ul>
+          <li>주일예배 — 주일 <strong>오전 11시</strong></li>
+          <li>매일 선포기도회 — 매일 <strong>밤 9시</strong></li>
+          <li>새벽기도 — 가정에서 공동체 성경읽기(큐티)로</li>
+        </ul>
+      </div>
+      <div class="welcome-card">
+        <h3>🤝 첫 방문, 이렇게 하세요</h3>
+        <ol>
+          <li>예배 후 담임목사님과 편하게 인사를 나누세요.</li>
+          <li>'풍성한 삶의 초대' 과정으로 복음과 교회를 알아갑니다.</li>
+          <li>과정을 마치면 새가족(하늘가족)으로 등록합니다.</li>
+        </ol>
+      </div>
+      <div class="welcome-card">
+        <h3>📞 문의</h3>
+        <p>전화: <a href="tel:010-8011-7905">010-8011-7905</a><br>
+        담임목사: 권영호 목사<br>
+        <a href="https://www.youtube.com/@cnksch" target="_blank" rel="noopener">유튜브로 먼저 만나보기 →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 오시는 길 ===== -->
+<section id="location" class="section section-alt">
+  <div class="container">
+    <h2>오시는 길</h2>
+    <p class="address"><strong>인천광역시 서구 청라한내로162번길 4-6, 4층</strong> (우 22752)</p>
+    <div class="map-wrap">
+      <iframe width="100%" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=인천광역시+서구+청라한내로162번길+4-6&t=&z=16&ie=UTF8&iwloc=&output=embed" style="border-radius: 8px; border: 1px solid #ddd;"></iframe>
+    </div>
+    <ul class="transit">
+      <li>🚌 대중교통(버스): 43번 (교회 앞 정류장 하차), 그 외 7번, 63번, 7700번, 9300번, 2-1번, 인천e음85번 등 이용</li>
+      <li>🚗 주차: 교회 앞 공영주차장 또는 교회 건물 1층 주차장 이용</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 푸터 ===== -->
+<footer class="site-footer">
+  <div class="container">
+    <p><strong>청라강성교회</strong> | 대한예수교장로회(합신) | 담임목사 권영호</p>
+    <p>인천광역시 서구 청라한내로162번길 4-6, 4층 | 전화 010-8011-7905</p>
+    <p class="footer-links">
+      <a href="https://www.youtube.com/@cnksch" target="_blank" rel="noopener">유튜브</a> ·
+      <a href="https://blog.naver.com/wormwood79" target="_blank" rel="noopener">블로그</a>
+    </p>
+  </div>
+</footer>
+
+<script src="script.js?v=2"></script>
+</body>
+</html>
