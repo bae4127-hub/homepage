@@ -468,3 +468,159 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   background: none; border: none; color: #fff; font-size: 0.95rem;
   font-weight: 600; cursor: pointer; padding: 4px;
 }
+
+/* ===== 교회 비전 및 가치 (Vision Section) ===== */
+.vision-section {
+  background: var(--bg-light);
+  padding: 80px 0;
+}
+.vision-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin-top: 50px;
+}
+@media (max-width: 992px) {
+  .vision-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 로고 설명 카드 */
+.vision-logo-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.3s;
+}
+.vision-logo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+.vision-logo-wrap img {
+  max-width: 200px;
+  height: auto;
+  filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.1));
+}
+.vision-logo-text h3 {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+.vision-logo-text p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-light);
+  margin-bottom: 25px;
+  word-break: keep-all;
+}
+
+/* 색상 배지 */
+.color-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.c-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.c-badge::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+.c-yellow { background: #f1c40f; color: #fff; }
+.c-yellow::before { background: #f1c40f; }
+.c-black { background: #333; color: #fff; }
+.c-black::before { background: #333; }
+.c-red { background: #e74c3c; color: #fff; }
+.c-red::before { background: #e74c3c; }
+.c-white { background: #fff; color: #333; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.c-white::before { background: #fff; border: 1px solid #ccc; }
+.c-green { background: #2ecc71; color: #fff; }
+.c-green::before { background: #2ecc71; }
+
+/* 5대 가치 그리드 */
+.core-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+.value-card {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.value-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(29, 92, 74, 0.03) 0%, rgba(29, 92, 74, 0) 100%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(29, 92, 74, 0.2);
+}
+.value-card:hover::before {
+  opacity: 1;
+}
+.value-icon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(29,92,74,0.2));
+}
+.value-card h4 {
+  font-size: 1.3rem;
+  color: var(--text-main);
+  margin-bottom: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.value-card h4 small {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary);
+  background: rgba(29, 92, 74, 0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.value-card p {
+  color: var(--text-light);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  word-break: keep-all;
+}

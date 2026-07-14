@@ -1,4 +1,4 @@
-﻿// 교회 소식 섹션: data/posts.json을 읽어 최신 블로그 글 카드를 표시.
+// 교회 소식 섹션: data/posts.json을 읽어 최신 블로그 글 카드를 표시.
 // posts.json은 GitHub Actions가 매일 블로그 RSS에서 자동 생성 (scripts/fetch-feeds.mjs).
 // 로컬에서 미리보기할 때는 폴더에 들어있는 샘플 데이터가 표시됩니다.
 
@@ -272,5 +272,5 @@ function markReveal(elements) {
 }
 
 markReveal(document.querySelectorAll(
-  ".section h2, .section-desc, .video-wrap, .welcome-card, .address, .map-wrap, .transit, .more-link"
+  ".section h2, .section-desc, .video-wrap, .welcome-card, .address, .map-wrap, .transit, .more-link, .vision-logo-card, .value-card"
 ));
