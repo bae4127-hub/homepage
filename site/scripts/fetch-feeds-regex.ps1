@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $OutPosts = "..\data\posts.json"
@@ -12,7 +12,7 @@ $HideCategories = @("낙서장", "일상기록", "책읽기")
 function Pick([string]$xml, [string]$tag) {
     if ($xml -match "<$tag>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?</$tag>") {
         $val = $matches[1].Trim()
-        $val = $val -replace "&#(\d+);", { [char][int]$args[0].Groups[1].Value }
+        $val = [regex]::Replace($val, '&#(\d+);', { param($m) [string][char][int]$m.Groups[1].Value })
         $val = $val -replace "&amp;", "&"
         $val = $val -replace "&lt;", "<"
         $val = $val -replace "&gt;", ">"

@@ -17,13 +17,13 @@ function renderPosts(posts) {
   const wrap = document.getElementById("blog-posts");
   // 이미지가 안 불러와지면 onerror로 제거 → 뒤에 깔린 대체 배경(⛪ 그라데이션)이 보임
   wrap.innerHTML = posts.slice(0, MAX_POSTS).map(p => `
-    <a class="post-card" href="${p.link}" target="_blank" rel="noopener">
+    <a class="post-card" href="${p.link}" target="_blank" rel="noopener" data-category="${p.category || '소식'}">
       <div class="post-thumb">
         ${p.image ? `<img src="${p.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}
       </div>
       <div class="post-body">
         <span class="post-cat">${p.category || "소식"}</span>
-        <h3>${p.title}</h3>
+        <h3>${p.title.replace(/^\\[.*?\\]\\s*/, '')}</h3>
         <time>${p.date}</time>
       </div>
     </a>
@@ -52,7 +52,11 @@ function renderFamilyWorship(posts) {
     { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지",
       guide: "블로그에 [오렌지카드] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." },
     { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회",
-      guide: "블로그에 [선포기도문] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." }
+      guide: "블로그에 [선포기도문] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." },
+    { id: "fw-column", match: "설교칼럼", badge: "✍️ 설교칼럼", label: "주일 설교 칼럼",
+      guide: "블로그에 [설교칼럼] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." },
+    { id: "fw-bible", match: "공동체성경읽기", badge: "📖 공동체성경읽기", label: "매일 성경읽기",
+      guide: "블로그에 [공동체성경읽기] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." }
   ];
   corners.forEach(c => {
     const el = document.getElementById(c.id);
@@ -73,28 +77,6 @@ function renderFamilyWorship(posts) {
   });
   markReveal(document.querySelectorAll(".fw-card"));
 }
-
-async function loadBible() {
-  const el = document.getElementById("fw-bible");
-  if (!el) return;
-  try {
-    const res = await fetch("data/latest-bible.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("no bible data");
-    const data = await res.json();
-    el.innerHTML = `
-      <span class="fw-badge">📖 공동체성경읽기</span>
-      <span class="fw-label">공동체 성경읽기</span>
-      <h3><a href="https://youtu.be/${data.videoId}" target="_blank" rel="noopener">${data.title}</a></h3>
-      <time>${data.date}</time>
-      <a class="fw-cta" href="https://youtu.be/${data.videoId}" target="_blank" rel="noopener">오늘 말씀 듣기 →</a>`;
-  } catch (e) {
-    el.innerHTML = `
-      <span class="fw-badge">📖 공동체성경읽기</span>
-      <span class="fw-label">공동체 성경읽기</span>
-      <p class="fw-empty">오늘의 성경읽기 말씀이 아직 업데이트되지 않았습니다.</p>`;
-  }
-}
-loadBible();
 
 loadPosts();
 
@@ -130,7 +112,9 @@ function renderOutreach(items) {
   const wrap = document.getElementById("outreach-list");
   wrap.innerHTML = items.map(p => `
     <a class="outreach-card" href="${p.link}" target="_blank" rel="noopener">
-      ${p.image ? `<div class="outreach-thumb"><img src="${p.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentElement.remove()"></div>` : ""}
+      <div class="outreach-thumb">
+        ${p.image ? `<img src="${p.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}
+      </div>
       <div class="outreach-body">
         <h3>${p.title}</h3>
         ${p.description ? `<p>${p.description}</p>` : ""}
