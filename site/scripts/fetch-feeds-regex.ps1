@@ -137,28 +137,5 @@ if ($latest) {
     Write-Host "Saved latest video to latest-video.json"
 }
 
-Write-Host "Fetching Bible Reading Playlist..."
-$playlistId = "PLBXK2QPDTvS8"
-if ($playlistId -ne "PLAYLIST_ID_HERE") {
-    try {
-        $plRssStr = (Invoke-WebRequest -Uri "https://www.youtube.com/feeds/videos.xml?playlist_id=$playlistId" -Headers @{"User-Agent"="Mozilla/5.0"} -UseBasicParsing).Content
-        $plMatches = [regex]::Matches($plRssStr, "<entry>([\s\S]*?)</entry>")
-        if ($plMatches.Count -gt 0) {
-            $e = $plMatches[$plMatches.Count - 1].Groups[1].Value
-            $videoId = Pick -xml $e -tag "yt:videoId"
-            $title = Pick -xml $e -tag "title"
-            # 날짜는 영상 업로드일이 아니라 스크립트 실행(업데이트) 날짜로 설정
-            $published = (Get-Date).ToString("yyyy-MM-dd")
-            
-            $bibleData = [ordered]@{
-                videoId = $videoId
-                title = $title
-                date = $published
-            }
-            $bibleData | ConvertTo-Json -Depth 5 | Set-Content -Path "..\data\latest-bible.json" -Encoding UTF8
-            Write-Host "Saved latest bible reading to latest-bible.json"
-        }
-    } catch {
-        Write-Host "Failed to fetch Bible reading playlist: $_"
-    }
-}
+# (2026-07-15 개편으로 '공동체성경읽기'는 블로그 글(posts.json) 연동으로 바뀌어
+#  유튜브 재생목록 -> latest-bible.json 생성 로직은 제거했습니다)

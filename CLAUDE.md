@@ -56,6 +56,7 @@ CSS 수정 시 `index.html`의 `style.css?v=N` 버전 번호를 올려 캐시를
 
 ## 검증된 연동 값 (재조사 불필요)
 
+- **홈페이지 도메인: `https://www.cnksch.or.kr`** (Netlify 연결, 2026-07-16 사용자 확인) — OG 태그·canonical·JSON-LD에 이 주소 사용
 - 유튜브 채널: `@cnksch` = `UC7OCid3xzRUptzmHUvA7B4g` (청라강성교회TV)
 - 유튜브 RSS: `https://www.youtube.com/feeds/videos.xml?channel_id=UC7OCid3xzRUptzmHUvA7B4g` (간헐적 500 → 재시도)
 - 블로그: `blog.naver.com/wormwood79` / RSS: `https://rss.blog.naver.com/wormwood79.xml`
@@ -100,7 +101,16 @@ CSS 수정 시 `index.html`의 `style.css?v=N` 버전 번호를 올려 캐시를
   - 메인/네비게이션 "처음 오셨나요?" 버튼 링크를 블로그의 새가족 안내 게시물로 연결.
   - '이웃사랑' 메뉴명을 '이웃사랑 · 세상사랑'으로 변경하고, `outreach.json`에 '사순절 탄소금식 캠페인' 추가 및 사진이 없는 아웃리치 카드를 위한 🌍 아이콘 그라데이션 썸네일 폴백(`style.css`) 추가.
   - 네이버 블로그 카테고리의 엔티티 문자(`&#160;`) 파싱 시 발생하는 글씨 깨짐 현상을 해결하기 위해 `fetch-feeds-regex.ps1`의 PowerShell 5.1 호환성 수정(`-replace` 스크립트블록 대신 `[regex]::Replace` 사용).
+- **말씀쇼츠 신설 (2026-07-15)**: 주간 신앙 가이드 섹션에 '말씀쇼츠' 카드를 추가하고, 블로그 제목에 `[말씀쇼츠]`가 있을 시 자동 연동되도록 구성함 (`index.html`, `script.js`, `style.css` 붉은 계열 그라데이션 추가). 1분 은혜 라벨 문구는 제외.
 
+## 홈페이지 개선 일괄 수정 (2026-07-16, 로컬 완료 — 푸시 대기)
+- **성능**: `hero2.jpg` 4MB(4000×3000) → 530KB(1920×1440, 품질80)로 압축. 원본은 `C:\Homepage\이미지백업\hero2-원본.jpg`, 이전 배경 hero.jpg도 같은 폴더로 이동
+- **SEO/공유**: `index.html` head에 파비콘(`images/favicon.png`·`apple-touch-icon.png`, 채널 프로필에서 생성), OG 태그(카톡·페북 공유 미리보기, `images/og-image.jpg` 1200×630), canonical, JSON-LD Church 구조화 데이터 추가
+- **버그 수정**: `script.js` 카드 제목 `[대괄호]` 제거 정규식 오타(`\\[` → `\[`) 수정, notice 날짜 판정을 한국시간 기준으로 변경(기존 UTC)
+- **CSS 정리**: 미정의 변수 4종(`--bg-card`→`#fff`, `--bg-light`→`var(--bg)`, `--radius-lg`→`var(--radius)`, `--text-main`→`var(--text)`) 수정, 깨져 있던 한글 주석 전체 복원(UTF-8 재저장), 모달 포스터 잘림 수정(`object-fit: contain` + `max-height: 56vh`)
+- **UX**: 주간 신앙 가이드 빈 카드의 관리자용 안내문을 방문자용 문구 + '블로그에서 지난 글 보기' 링크로 교체
+- **잔재물 제거**: `data/latest-bible.json`·`playlist.xml` 삭제, `fetch-feeds.mjs`·`fetch-feeds-regex.ps1`의 latest-bible 생성 로직 제거(성경읽기는 블로그 연동으로 대체됨), 지도 iframe에 title 속성 추가
+- **캐시 버전**: `style.css?v=10`, `script.js?v=3`으로 올림
 ## 관련 문서
 
 - `README.md` — 사용자용 진행 체크리스트·운영 루틴·배너 관리법 (수정 시 사용자 눈높이 유지)

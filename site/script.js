@@ -7,7 +7,7 @@ const MAX_POSTS = 6;
 
 // file:// 로 직접 열었을 때(보안 정책으로 fetch 차단) 대신 표시할 예비 목록 (실제 글)
 const FALLBACK_POSTS = [
-  { title: "진짜를 만나면, 가짜에 목마르지 않습니다", link: "https://blog.naver.com/wormwood79/224212885019", date: "2026-03-12", category: "말씀쇼츠", image: "https://i.ytimg.com/vi/KHaOw9tYbvQ/hqdefault.jpg" },
+  { title: "[말씀쇼츠] 진짜를 만나면, 가짜에 목마르지 않습니다", link: "https://blog.naver.com/wormwood79/224212885019", date: "2026-03-12", category: "말씀쇼츠", image: "https://i.ytimg.com/vi/KHaOw9tYbvQ/hqdefault.jpg" },
   { title: "믿음은 악력이 아니라 '빈손'입니다", link: "https://blog.naver.com/wormwood79/224212904727", date: "2026-03-12", category: "말씀쇼츠", image: "https://i.ytimg.com/vi/lT_xdrQUkK8/hqdefault.jpg" },
   { title: "내 안의 말씀이 죽어간다 — 좋은 밭의 비밀", link: "https://blog.naver.com/wormwood79/224201373185", date: "2026-03-02", category: "말씀쇼츠", image: "https://i.ytimg.com/vi/TxrIC4r6Mi0/hqdefault.jpg" },
   { title: "바닥이 편하다고 느낀다면, 그게 정말 나다운 걸까?", link: "https://blog.naver.com/wormwood79/224183503554", date: "2026-02-14", category: "말씀쇼츠", image: "https://i.ytimg.com/vi/kg7LKQ-rros/hqdefault.jpg" }
@@ -23,7 +23,7 @@ function renderPosts(posts) {
       </div>
       <div class="post-body">
         <span class="post-cat">${p.category || "소식"}</span>
-        <h3>${p.title.replace(/^\\[.*?\\]\\s*/, '')}</h3>
+        <h3>${p.title.replace(/^\[.*?\]\s*/, '')}</h3>
         <time>${p.date}</time>
       </div>
     </a>
@@ -48,15 +48,14 @@ async function loadPosts() {
 // 블로그 글 제목에 "오렌지카드" / "선포기도"가 들어 있으면 최신 글이 자동으로 여기 표시됨.
 // (블로그 템플릿 09·10번의 제목 규칙을 지키면 됨 — 별도 관리 불필요)
 function renderFamilyWorship(posts) {
+  // 해당 글이 최근 목록에 없을 때는 방문자용 안내 문구 + 블로그 지난 글 링크를 보여줌
+  const BLOG_URL = "https://blog.naver.com/wormwood79";
   const corners = [
-    { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지",
-      guide: "블로그에 [오렌지카드] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." },
-    { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회",
-      guide: "블로그에 [선포기도문] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." },
-    { id: "fw-column", match: "설교칼럼", badge: "✍️ 설교칼럼", label: "주일 설교 칼럼",
-      guide: "블로그에 [설교칼럼] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." },
-    { id: "fw-bible", match: "공동체성경읽기", badge: "📖 공동체성경읽기", label: "매일 성경읽기",
-      guide: "블로그에 [공동체성경읽기] 제목으로 글을 올리면 이 자리에 자동으로 표시됩니다." }
+    { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지" },
+    { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회" },
+    { id: "fw-column", match: "설교칼럼", badge: "✍️ 설교칼럼", label: "주일 설교 칼럼" },
+    { id: "fw-bible", match: "공동체성경읽기", badge: "📖 공동체성경읽기", label: "매일 성경읽기" },
+    { id: "fw-shorts", match: "말씀쇼츠", badge: "🎬 말씀쇼츠", label: "" }
   ];
   corners.forEach(c => {
     const el = document.getElementById(c.id);
@@ -64,15 +63,16 @@ function renderFamilyWorship(posts) {
     if (post) {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>
-        <span class="fw-label">${c.label}</span>
+        ${c.label ? `<span class="fw-label">${c.label}</span>` : ""}
         <h3><a href="${post.link}" target="_blank" rel="noopener">${post.title}</a></h3>
         <time>${post.date}</time>
         <a class="fw-cta" href="${post.link}" target="_blank" rel="noopener">이번 주 내용 보기 →</a>`;
     } else {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>
-        <span class="fw-label">${c.label}</span>
-        <p class="fw-empty">${c.guide}</p>`;
+        ${c.label ? `<span class="fw-label">${c.label}</span>` : ""}
+        <p class="fw-empty">이번 주 콘텐츠를 준비 중입니다. 지난 글은 교회 블로그에서 보실 수 있어요.</p>
+        <a class="fw-cta" href="${BLOG_URL}" target="_blank" rel="noopener">블로그에서 지난 글 보기 →</a>`;
     }
   });
   markReveal(document.querySelectorAll(".fw-card"));
@@ -147,7 +147,9 @@ async function loadNotice() {
     const data = await res.json();
     const list = Array.isArray(data) ? data : [data];
 
-    const today = new Date().toISOString().slice(0, 10);
+    // 한국 시간 기준의 오늘 날짜 (toISOString은 세계표준시라 오전 9시 전까지 전날로 계산되는 문제가 있음)
+    const now = new Date();
+    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
     const visible = list.filter(n =>
       n.active &&
       (!n.start || today >= n.start) &&

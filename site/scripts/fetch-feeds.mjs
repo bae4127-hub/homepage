@@ -100,31 +100,5 @@ if (latest) {
   console.log(`완료: ${VIDEO_FILE} ← ${latest.date} "${latest.title}"`);
 }
 
-// ===== 3. 공동체 성경읽기 (유튜브 재생목록 연동) =====
-console.log("YouTube Playlist RSS 가져오기...");
-const PLAYLIST_ID = "PLBXK2QPDTvS8";
-if (PLAYLIST_ID !== "PLAYLIST_ID_HERE") {
-  try {
-    const plRes = await fetch(`https://www.youtube.com/feeds/videos.xml?playlist_id=${PLAYLIST_ID}`);
-    if (plRes.ok) {
-      const plXml = await plRes.text();
-      const matches = [...plXml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)];
-      if (matches.length > 0) {
-        const e = matches[matches.length - 1][1];
-        // 날짜는 영상 업로드일이 아니라 스크립트 실행(업데이트) 날짜로 설정
-        const updateDate = new Date();
-        const dateStr = new Date(updateDate.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10); // KST 변환
-        
-        const bibleData = {
-          videoId: pick(e, "yt:videoId"),
-          title: pick(e, "title"),
-          date: dateStr,
-        };
-        await writeFile(new URL("../data/latest-bible.json", import.meta.url), JSON.stringify(bibleData, null, 2), "utf8");
-        console.log(`완료: latest-bible.json ← ${bibleData.date} "${bibleData.title}"`);
-      }
-    }
-  } catch (err) {
-    console.error("Bible Playlist Error:", err);
-  }
-}
+// (2026-07-15 개편으로 '공동체성경읽기'는 블로그 글(posts.json) 연동으로 바뀌어
+//  유튜브 재생목록 → latest-bible.json 생성 로직은 제거했습니다)

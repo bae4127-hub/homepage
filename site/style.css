@@ -1,14 +1,17 @@
 /* ============================================================
-   泥?씪媛뺤꽦援먰쉶 ?덊럹?댁? ??紐⑤뜕 ?붿옄??   湲?섏뒪紐⑦뵾利?+ 移대뱶 UI + ?ㅽ겕濡??좊땲硫붿씠??   ?됱긽 蹂寃? ?꾨옒 :root 蹂?섎쭔 ?섏젙?섎㈃ ?꾩껜 遺꾩쐞湲곌? 諛붾앸땲??   ============================================================ */
+   청라강성교회 홈페이지 — 모던 디자인
+   글래스모피즘 + 카드 UI + 스크롤 애니메이션
+   색상 변경: 아래 :root 변수만 수정하면 전체 분위기가 바뀝니다
+   ============================================================ */
 :root {
-  --primary: #1d5c4a;            /* 硫붿씤 ??源딆? ?뱀깋 [援먰쉶 濡쒓퀬 ?됱쑝濡?援먯껜 媛?? */
+  --primary: #1d5c4a;            /* 메인 색 — 깊은 녹색 (교회 로고 색으로 교체 가능) */
   --primary-deep: #11362c;
   --primary-soft: #2e7a63;
-  --accent: #e3b04b;             /* ?ъ씤?????곕쑜??湲덉깋 */
+  --accent: #e3b04b;             /* 포인트 색 — 따뜻한 금색 */
   --accent-soft: #f3d489;
   --text: #1f2823;
   --text-light: #5c6962;
-  --bg: #fbfaf7;                 /* 蹂몃Ц 諛곌꼍 ???곕쑜???붿씠??*/
+  --bg: #fbfaf7;                 /* 본문 배경 — 따뜻한 화이트 */
   --bg-alt: #f1efe8;
   --card: rgba(255, 255, 255, 0.72);
   --card-border: rgba(255, 255, 255, 0.55);
@@ -32,7 +35,7 @@ body {
 a { color: var(--primary); }
 ::selection { background: var(--accent-soft); }
 
-/* ===== ?곷떒 硫붾돱 ??湲?섏뒪紐⑦뵾利?===== */
+/* ===== 상단 메뉴 — 글래스모피즘 ===== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
   background: rgba(251, 250, 247, 0.65);
@@ -60,7 +63,7 @@ a { color: var(--primary); }
 .nav a:hover { color: var(--primary); }
 .nav a:hover::after { transform: scaleX(1); }
 
-/* ?곷떒 硫붾돱??"泥섏쓬 ?ㅼ뀲?섏슂?" 怨좎젙 踰꾪듉 */
+/* 상단 메뉴의 "처음 오셨나요?" 고정 버튼 */
 .nav a.nav-cta {
   color: var(--primary-deep); font-weight: 700;
   background: linear-gradient(135deg, var(--accent-soft), var(--accent));
@@ -75,11 +78,11 @@ a { color: var(--primary); }
   box-shadow: 0 8px 20px rgba(97, 148, 248, 0.45);
 }
 
-/* ===== 硫붿씤 鍮꾩＜?????깅룄 ?⑥껜?ъ쭊 諛곌꼍 (images/hero.jpg 援먯껜 ???ш린留??섏젙) ===== */
+/* ===== 메인 비주얼 — 성도 단체사진 배경 (images/hero2.jpg 교체 시 여기만 수정) ===== */
 .hero {
   position: relative; overflow: hidden;
-  /* ?ъ쭊 ?꾩뿉 ?대몢???뱀깋留됱쓣 ??뼱 ??湲?④? ???쏀엳寃???
-     ?ъ쭊????遺덈윭?吏??뚮뒗 留??ㅼ쓽 ?뱀깋 洹몃씪?곗씠?섏씠 ???蹂댁엫 */
+  /* 사진 위에 어두운 색막을 씌워 흰 글자가 잘 읽히게 함.
+     사진이 안 불러와질 때는 맨 뒤의 녹색 그라데이션이 대신 보임 */
   background:
     linear-gradient(rgba(6, 21, 54, 0.60), rgba(6, 21, 54, 0.72)),
     url('images/hero2.jpg') center 38% / cover no-repeat,
@@ -128,10 +131,10 @@ a { color: var(--primary); }
 }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(97, 148, 248, 0.45); }
 
-/* ===== ?됱궗 怨좎젙 諛곕꼫 ===== */
+/* ===== 행사 고정 배너 ===== */
 .notice-section { margin-top: -56px; position: relative; z-index: 5; }
 .notice-grid { display: grid; gap: 18px; }
-/* 諛곕꼫媛 2媛??댁긽?대㈃ ?섎???諛곗튂 (醫곸? ?붾㈃?먯꽌???먮룞?쇰줈 ?몃줈 ?볦엫) */
+/* 배너가 2개 이상이면 나란히 배치 (좁은 화면에서는 자동으로 세로로 놓임) */
 .notice-grid.notice-multi { grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); }
 .notice-grid.notice-multi .notice-thumb { flex: 0 0 150px; }
 .notice-grid.notice-multi .notice-body { padding: 20px 22px; }
@@ -172,7 +175,7 @@ a { color: var(--primary); }
 }
 @media (prefers-reduced-motion: reduce) { .notice-badge { animation: none; } }
 
-/* ===== 怨듯넻 ?뱀뀡 ===== */
+/* ===== 공통 섹션 ===== */
 .section { padding: 96px 0; }
 .section-alt {
   background:
@@ -198,7 +201,7 @@ a { color: var(--primary); }
 }
 .more-link a:hover { background: rgba(12, 44, 109, 0.12); transform: translateY(-2px); }
 
-/* ===== ?좏뒠釉??곸긽 ===== */
+/* ===== 유튜브 영상 ===== */
 .video-wrap {
   position: relative; padding-bottom: 56.25%; max-width: 880px; margin: 0 auto;
   border-radius: var(--radius); overflow: hidden;
@@ -221,7 +224,7 @@ a { color: var(--primary); }
 }
 .sermon-thumb-link:hover .play-icon { transform: scale(1.15); }
 
-/* ===== 釉붾줈洹??뚯떇 ??湲?섏뒪 移대뱶 ===== */
+/* ===== 블로그 소식 — 글래스 카드 ===== */
 .post-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
 .post-card {
   position: relative; display: block; text-decoration: none; color: var(--text);
@@ -297,7 +300,7 @@ a { color: var(--primary); }
 .post-card time { font-size: 0.82rem; color: var(--text-light); }
 .loading { text-align: center; color: var(--text-light); grid-column: 1 / -1; }
 
-/* ===== 媛?뺤삁諛?쨌 諛ㅺ린?꾪쉶 移대뱶 ===== */
+/* ===== 가정예배 · 밤기도회 카드 ===== */
 .fw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
 .fw-card {
   border-radius: var(--radius); padding: 30px;
@@ -310,7 +313,8 @@ a { color: var(--primary); }
 .fw-prayer { background: linear-gradient(140deg, #2b3a67 0%, #141d3a 100%); }
 .fw-bible { background: linear-gradient(140deg, #11998e 0%, #38ef7d 100%); }
 .fw-column { background: linear-gradient(140deg, #7b4397 0%, #dc2430 100%); }
-.fw-card::after { /* ????鍮??μ떇 */
+.fw-shorts { background: linear-gradient(140deg, #ff416c 0%, #ff4b2b 100%); }
+.fw-card::after { /* 카드 우상단 원형 빛 장식 */
   content: ""; position: absolute; right: -60px; top: -60px;
   width: 200px; height: 200px; border-radius: 50%;
   background: rgba(255, 255, 255, 0.12); filter: blur(10px);
@@ -334,9 +338,9 @@ a { color: var(--primary); }
   transition: background 0.25s;
 }
 .fw-cta:hover { background: rgba(255, 255, 255, 0.28); }
-.fw-empty { font-size: 0.9rem; opacity: 0.9; line-height: 1.7; }
+.fw-empty { font-size: 0.9rem; opacity: 0.9; line-height: 1.7; margin-bottom: 14px; }
 
-/* ===== ?댁썐?щ옉 移대뱶 ???ъ쭊怨?湲???섎???媛濡쒗삎 ===== */
+/* ===== 이웃사랑 카드 — 사진과 글이 나란한 가로형 ===== */
 .outreach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; }
 .outreach-card {
   display: flex; align-items: stretch; text-decoration: none; color: var(--text);
@@ -347,9 +351,9 @@ a { color: var(--primary); }
   transition: transform 0.3s var(--ease), box-shadow 0.3s;
 }
 .outreach-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
-.outreach-thumb { 
-  flex: 0 0 160px; position: relative; min-height: 140px; 
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); 
+.outreach-thumb {
+  flex: 0 0 160px; position: relative; min-height: 140px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
@@ -367,7 +371,7 @@ a { color: var(--primary); }
   .outreach-thumb { flex: none; height: 150px; }
 }
 
-/* ===== ?덇?議?移대뱶 ===== */
+/* ===== 새가족 카드 ===== */
 .welcome-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
 .welcome-card {
   background: linear-gradient(160deg, #fff 0%, #faf7ef 100%);
@@ -382,7 +386,7 @@ a { color: var(--primary); }
 .welcome-card li { margin-bottom: 8px; }
 .welcome-card li::marker { color: var(--accent); font-weight: 700; }
 
-/* ===== ?ㅼ떆??湲?===== */
+/* ===== 오시는 길 ===== */
 .address { text-align: center; margin-bottom: 26px; font-size: 1.05rem; }
 .map-wrap { max-width: 880px; margin: 0 auto 24px; }
 .map-placeholder {
@@ -403,7 +407,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   border-radius: 14px; padding: 13px 20px; box-shadow: var(--shadow-sm);
 }
 
-/* ===== ?명꽣 ===== */
+/* ===== 푸터 ===== */
 .site-footer {
   background: linear-gradient(160deg, var(--primary-deep), var(--primary));
   color: rgba(255, 255, 255, 0.88); text-align: center;
@@ -413,21 +417,21 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
 .site-footer a { color: #fff; font-weight: 600; }
 .footer-links { margin-top: 14px; opacity: 0.92; }
 
-/* ===== ?ㅽ겕濡??깆옣 ?좊땲硫붿씠??(script.js? ?곕룞) ===== */
+/* ===== 스크롤 등장 애니메이션 (script.js와 연동) ===== */
 .reveal {
   opacity: 0; transform: translateY(26px);
   transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
 }
 .reveal.visible { opacity: 1; transform: none; }
 
-/* 紐⑥뀡 理쒖냼???ㅼ젙 ?ъ슜??諛곕젮 */
+/* 모션 최소화 설정 사용자 배려 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .post-card, .welcome-card, .btn-primary, .more-link a { transition: none; }
 }
 
-/* ===== 紐⑤컮??===== */
+/* ===== 모바일 ===== */
 @media (max-width: 640px) {
   .section { padding: 64px 0; }
   .hero { padding: 80px 0 96px; }
@@ -440,14 +444,14 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   .hero-info span { padding: 7px 14px; font-size: 0.86rem; }
 }
 
-/* ?꾩＜ 醫곸? ?붾㈃: ?ㅻ뜑瑜?2??濡쒓퀬 / 硫붾돱 ??以??쇰줈 ??硫붾돱 4媛쒓? ??긽 紐⑤몢 蹂댁엫 */
+/* 아주 좁은 화면: 헤더를 2단(로고 / 메뉴)으로 — 메뉴 4개가 항상 모두 보임 */
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
   .header-inner {
     flex-wrap: wrap; height: auto; padding: 10px 0 12px;
     justify-content: center; row-gap: 8px;
   }
-  /* 硫붾돱 4媛쒕? 2횞2 踰꾪듉 寃⑹옄濡???湲???ш린? ?곴??놁씠 ?덈? ?섎━吏 ?딆쓬 */
+  /* 메뉴 4개를 2×2 버튼 격자로 — 글자 크기와 상관없이 절대 밀리지 않음 */
   .nav {
     width: 100%; display: grid; grid-template-columns: 1fr 1fr;
     gap: 6px 10px; white-space: nowrap;
@@ -457,10 +461,10 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
     padding: 7px 0; border-radius: 10px;
     background: rgba(12, 44, 109, 0.06);
   }
-  /* "泥섏쓬 ?ㅼ뀲?섏슂?" 踰꾪듉? ??以??꾩껜瑜?李⑥???媛???덉뿉 ?꾧쾶 */
+  /* "처음 오셨나요?" 버튼도 같은 격자 칸 안에 들어감 */
 }
 
-/* ===== ?앹뾽(紐⑤떖) 諛곕꼫 ===== */
+/* ===== 팝업(모달) 배너 ===== */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 9999;
   background: rgba(0, 0, 0, 0.6);
@@ -488,7 +492,8 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   transition: background 0.2s;
 }
 .modal-close:hover { background: rgba(0, 0, 0, 0.8); }
-.modal-thumb { width: 100%; height: auto; max-height: 400px; object-fit: cover; }
+/* 포스터가 잘리지 않고 전체가 보이도록 contain 사용 (남는 여백은 어두운 배경) */
+.modal-thumb { width: 100%; height: auto; max-height: 56vh; object-fit: contain; background: #10141f; }
 .modal-body { padding: 24px; text-align: center; }
 .modal-body h3 { font-size: 1.2rem; color: var(--primary-deep); font-weight: 800; margin-bottom: 10px; }
 .modal-body p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 20px; }
@@ -505,9 +510,9 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   font-weight: 600; cursor: pointer; padding: 4px;
 }
 
-/* ===== 援먰쉶 鍮꾩쟾 諛?媛移?(Vision Section) ===== */
+/* ===== 교회 비전 및 가치 (Vision Section) ===== */
 .vision-section {
-  background: var(--bg-light);
+  background: var(--bg);
   padding: 56px 0;
 }
 .vision-grid {
@@ -523,10 +528,10 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   }
 }
 
-/* 濡쒓퀬 ?ㅻ챸 移대뱶 */
+/* 로고 설명 카드 */
 .vision-logo-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  background: #fff;
+  border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -559,7 +564,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   word-break: keep-all;
 }
 
-/* ?됱긽 諛곗? */
+/* 색상 배지 */
 .color-badges {
   display: flex;
   flex-wrap: wrap;
@@ -595,16 +600,16 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
 .c-green { background: #2ecc71; color: #fff; }
 .c-green::before { background: #2ecc71; }
 
-/* 5? 媛移?洹몃━??*/
+/* 5대 가치 그리드 */
 .core-values-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
 }
 .value-card {
-  background: var(--bg-card);
+  background: #fff;
   padding: 18px 20px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
   border: 1px solid rgba(0,0,0,0.03);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -635,7 +640,7 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
 }
 .value-card h4 {
   font-size: 1.02rem;
-  color: var(--text-main);
+  color: var(--text);
   margin-bottom: 8px;
   font-weight: 700;
   display: flex;
@@ -657,4 +662,3 @@ a.map-placeholder:hover { border-color: var(--primary-soft); background: rgba(25
   font-size: 0.88rem;
   word-break: keep-all;
 }
-
