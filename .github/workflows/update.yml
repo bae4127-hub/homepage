@@ -1,34 +1,60 @@
-﻿name: Daily Feeds Update
+name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches: ["main"]
   schedule:
     # 매일 한국시간 오전 5시 (UTC 20:00)
     - cron: '0 20 * * *'
-  workflow_dispatch: # 수동 실행 허용
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  update-feeds:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
+        if: github.event_name != 'push'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Fetch Latest Feeds
+        if: github.event_name != 'push'
         run: |
           cd site
           node scripts/fetch-feeds.mjs
 
       - name: Commit and Push changes
+        if: github.event_name != 'push'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add site/data/
           git diff --staged --quiet || (git commit -m "Auto-update feeds" && git push)
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
