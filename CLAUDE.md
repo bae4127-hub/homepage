@@ -56,7 +56,7 @@ CSS 수정 시 `index.html`의 `style.css?v=N` 버전 번호를 올려 캐시를
 
 ## 검증된 연동 값 (재조사 불필요)
 
-- **홈페이지 도메인: `https://www.cnksch.or.kr`** (Netlify 연결, 2026-07-16 사용자 확인) — OG 태그·canonical·JSON-LD에 이 주소 사용
+- **홈페이지 도메인: `https://cnksch.or.kr`** (www 없는 주소가 대표 — www는 여기로 301 리다이렉트됨, Netlify 연결, 2026-07-16 확인) — OG 태그·canonical·JSON-LD에 이 주소 사용
 - 유튜브 채널: `@cnksch` = `UC7OCid3xzRUptzmHUvA7B4g` (청라강성교회TV)
 - 유튜브 RSS: `https://www.youtube.com/feeds/videos.xml?channel_id=UC7OCid3xzRUptzmHUvA7B4g` (간헐적 500 → 재시도)
 - 블로그: `blog.naver.com/wormwood79` / RSS: `https://rss.blog.naver.com/wormwood79.xml`
