@@ -91,6 +91,13 @@ CSS 수정 시 `index.html`의 `style.css?v=N` 버전 번호를 올려 캐시를
 - **DNS 정보 (참고용)**: `cnksch.or.kr`은 GitHub Pages IP(`185.199.108~111.153`)로 A 레코드가 연결되어 있으며, `www.cnksch.or.kr`은 `bae4127-hub.github.io`로 CNAME이 연결되어 있습니다. `site/CNAME` 파일이 이를 증명합니다.
 - **이전 Netlify 잔재**: `netlify.toml`은 삭제 완료되었으며, 가비아 DNS 설정에서 이전 Netlify A 레코드들도 삭제 완료되었습니다. Netlify 대시보드의 기존 프로젝트는 삭제 처리해도 됩니다.
 
+## 🔍 검색엔진 최적화 (SEO) 및 검색 포털 등록 안내
+- **기본 SEO 세팅 완료 (2026-07-16)**: `sitemap.xml`과 `robots.txt`가 `site/` 폴더에 추가되었으며, `index.html` 내부에 메타 태그(title, description, canonical, Open Graph)와 JSON-LD 구조화 데이터(Church)가 완벽히 설정되어 있습니다.
+- **사용자 필수 진행 사항 (사이트 소유권 확인)**:
+  - 구글(Google Search Console)과 네이버(네이버 서치어드바이저)에 사이트를 등록해야 검색 노출이 극대화됩니다.
+  - 사용자가 각 포털에서 발급받은 **HTML 메타 태그(`<meta name="...-site-verification" ... />`)**를 제공하면, 에이전트(Claude)는 이를 `site/index.html`의 `<head>` 태그 내에 삽입한 후 `git push` 해야 합니다.
+  - 소유권 확인 코드가 삽입 및 배포 완료되면, 사용자가 각 포털에서 소유권 확인 버튼을 누르고 `sitemap.xml` 주소(`https://cnksch.or.kr/sitemap.xml`)를 제출하도록 안내해야 합니다.
+
 ## 최근 변경 사항 (2026-07-14 ~ 15)
 - **지도 추가**: `index.html` 하단 오시는 길에 네이버 지도 링크 대신 구글 지도 iframe을 영구적으로 삽입하여 화면에 직접 지도가 보이도록 수정.
 - **교통편 및 주차 정보 구체화**: 43번 버스(교회 앞 하차) 및 주변 버스 노선 명시, 지하 주차장이 아닌 '1층 주차장'으로 안내 수정.
