@@ -31,11 +31,26 @@ const xml = await res.text();
 
 const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(m => {
   const it = m[1];
-  const d = new Date(pick(it, "pubDate"));
+  const title = pick(it, "title");
+  let date = "";
+  
+  // 제목에서 'YY년 M월 D일' 또는 'YYYY년 M월 D일' 추출
+  const dateMatch = title.match(/(\d{2,4})년\s*(\d{1,2})월\s*(\d{1,2})일/);
+  if (dateMatch) {
+    let year = dateMatch[1];
+    year = year.length === 2 ? "20" + year : year;
+    const month = dateMatch[2].padStart(2, '0');
+    const day = dateMatch[3].padStart(2, '0');
+    date = `${year}-${month}-${day}`;
+  } else {
+    const d = new Date(pick(it, "pubDate"));
+    date = isNaN(d) ? "" : d.toISOString().slice(0, 10);
+  }
+
   return {
-    title: pick(it, "title"),
+    title: title,
     link: pick(it, "link").replace(/&amp;/g, "&").replace(/\?fromRss=true.*$/, ""),
-    date: isNaN(d) ? "" : d.toISOString().slice(0, 10),
+    date: date,
     category: pick(it, "category"),
   };
 }).filter(p => p.title && !HIDE_CATEGORIES.includes(p.category));

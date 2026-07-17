@@ -59,7 +59,7 @@ function renderFamilyWorship(posts) {
   ];
   corners.forEach(c => {
     const el = document.getElementById(c.id);
-    const post = posts.find(p => p.title.includes(c.match));
+    const post = posts.find(p => p.title.includes(c.match) || (p.category && p.category.includes(c.match)));
     if (post) {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>

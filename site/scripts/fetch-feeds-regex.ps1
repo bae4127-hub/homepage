@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+﻿$ErrorActionPreference = "Stop"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $OutPosts = "..\data\posts.json"
@@ -39,10 +39,18 @@ foreach ($m in $matches_list) {
     
     $pubDate = Pick -xml $it -tag "pubDate"
     $dateStr = ""
-    try {
-        $dateObj = [datetime]::Parse($pubDate)
-        $dateStr = $dateObj.ToString("yyyy-MM-dd")
-    } catch { }
+    if ($title -match "(\d{2,4})년\s*(\d{1,2})월\s*(\d{1,2})일") {
+        $y = $matches[1]
+        if ($y.Length -eq 2) { $y = "20" + $y }
+        $m = $matches[2].PadLeft(2, '0')
+        $d = $matches[3].PadLeft(2, '0')
+        $dateStr = "$y-$m-$d"
+    } else {
+        try {
+            $dateObj = [datetime]::Parse($pubDate)
+            $dateStr = $dateObj.ToString("yyyy-MM-dd")
+        } catch { }
+    }
 
     $postObj = [ordered]@{
         title = $title
