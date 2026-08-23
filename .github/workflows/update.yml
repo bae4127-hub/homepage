@@ -4,8 +4,8 @@ on:
   push:
     branches: ["main"]
   schedule:
-    # 매일 한국시간 오전 5시 (UTC 20:00)
-    - cron: '0 20 * * *'
+    # 매일 한국시간 오전 5시 10분 (UTC 20:10)
+    - cron: '10 20 * * *'
   workflow_dispatch:
 
 permissions:
