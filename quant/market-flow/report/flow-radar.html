@@ -8,6 +8,7 @@
   --paper:#F3F5F3; --panel:#FBFCFB; --ink:#161C21; --ink2:#3D4A52; --muted:#66727A;
   --rule:#D9DEDA; --rule2:#E9EDEA;
   --teal:#009C8C; --teal-ink:#00786C; --brick:#B4551F; --brick-ink:#9A481A;
+  --gold-ink:#8A6A12;
   --shade:rgba(180,85,31,.10);
   --grid:#E2E7E3;
   --posbg:rgba(0,156,140,.12); --negbg:rgba(180,85,31,.12);
@@ -17,6 +18,7 @@
     --paper:#0F1316; --panel:#161B1F; --ink:#E5EAE7; --ink2:#B4BEBA; --muted:#87948F;
     --rule:#2A3238; --rule2:#212930;
     --teal:#2ABBA9; --teal-ink:#4FD3C1; --brick:#D9793F; --brick-ink:#E89660;
+    --gold-ink:#C9A63C;
     --shade:rgba(217,121,63,.13);
     --grid:#242C32;
     --posbg:rgba(42,187,169,.16); --negbg:rgba(217,121,63,.16);
@@ -26,6 +28,7 @@
   --paper:#0F1316; --panel:#161B1F; --ink:#E5EAE7; --ink2:#B4BEBA; --muted:#87948F;
   --rule:#2A3238; --rule2:#212930;
   --teal:#2ABBA9; --teal-ink:#4FD3C1; --brick:#D9793F; --brick-ink:#E89660;
+    --gold-ink:#C9A63C;
   --shade:rgba(217,121,63,.13);
   --grid:#242C32;
   --posbg:rgba(42,187,169,.16); --negbg:rgba(217,121,63,.16);
@@ -124,6 +127,7 @@ tr.win td{background:var(--posbg)}
 tr.bh td{border-top:1px solid var(--rule);color:var(--muted)}
 td.best{color:var(--teal-ink);font-weight:600}
 td.bad{color:var(--brick-ink)}
+.scroll + p{margin-top:18px}
 .note{font-size:12.5px;color:var(--muted);margin:9px 0 0;max-width:74ch}
 
 /* ---- caveats ----------------------------------------------------------- */
@@ -159,39 +163,96 @@ footer a{color:var(--teal-ink)}
   .layer .w{grid-column:2;text-align:left;padding-top:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---- 개정 요약 층 ------------------------------------------------------- */
+.layer.fix{grid-template-columns:64px 1fr}
+.tag.ok{color:var(--teal-ink)}
+.tag.warn{color:var(--gold-ink)}
+.tag.bad{color:var(--brick-ink)}
+.layer.fix .tag{font-size:11.5px;letter-spacing:.02em}
+.layer .s strong{font-weight:600;color:var(--ink2)}
 </style>
 
 <div class="wrap">
 
 <header class="mast">
-  <p class="kicker">Quant Research Memo · 2026.09.03</p>
+  <p class="kicker">Quant Research Memo · 2차 개정 · 2026.09.03</p>
   <h1>돈은 어디로 흐르는가</h1>
-  <p class="dek">시장의 자금 흐름을 4개 층으로 나눠 추정하고, 그 판단으로 위험자산 비중을 조절하는 구조 —
-    설계부터 실측 백테스트, 그리고 실패한 부분까지.</p>
+  <p class="dek">시장의 자금 흐름을 4개 층으로 추정해 위험자산 비중을 조절하는 구조.
+    1차 검증의 한계를 고치는 과정에서 결과를 무효화하는 계산 버그 두 건이 나왔고,
+    표본을 27.5년으로 늘려 전부 다시 쟀다.</p>
   <div class="meta">
-    <span><b>대상</b> KOSPI200 · S&amp;P500 선물</span>
-    <span><b>표본</b> 9.8년 · 34.2년</span>
+    <span><b>대상</b> KOSPI 27.5년 · S&amp;P500 34.2년</span>
+    <span><b>표본</b> 1997.07–2025.03</span>
     <span><b>비용</b> 편도 10bp</span>
+    <span><b>현금이자</b> 2%</span>
     <span><b>체결</b> 신호일 +1영업일</span>
   </div>
 </header>
 
 <div class="verdict">
-  <p><strong>결론부터.</strong> 구조는 작동한다. 단, 시장마다 쓰임이 다르다.
-    한국에서는 <strong>방향 신호</strong>(살까/말까)로, 미국에서는 <strong>위험 조절 신호</strong>(얼마나 실을까)로 써야 한다.</p>
-  <p>기본 규칙(월말 리밸런싱)만으로는 수익률에서 단순보유를 이기지 못했다.
-    다만 최대낙폭(MDD)은 양 시장 모두 절반 가까이 줄였고,
-    <strong>주간 리밸런싱으로 바꾸자 한국에서는 수익률·변동성·MDD·샤프 전 항목에서 앞섰다.</strong></p>
-  <p>가장 값진 발견은 <strong>FLOW 층(환율·달러·주식/금)</strong>이다.
-    원/달러 하나만으로도 60일 정보계수 0.113 — 한국 시장의 방향은 외국인 자금이 정한다는 통념이 데이터로 확인됐다.</p>
+  <p><strong>결론.</strong> 이 구조는 수익률 기계가 아니라 <strong>위험 조절 장치</strong>다.
+    27.5년 한국에서 CAGR은 6.42% 대 5.55%로 앞섰지만,
+    <strong>그 초과분의 사실상 전부가 1997–2003 한 구간에서 나왔다.</strong>
+    꾸준히 개선되는 건 변동성(−43%), MDD(−42%), 샤프(2배)다.</p>
+  <p><strong>그리고 이 전략은 62%의 해에 시장에 진다.</strong>
+    롤링 1년 초과수익 중앙값 −2.97%p, 이긴 해는 38.3%.
+    평상시엔 조금씩 지고 위기에 크게 이기는 프로파일이다. 이걸 못 견디면 쓸 수 없다.</p>
+  <p><strong>전향 OOS 1년은 실패했다.</strong> 2024.04–2025.03에 −15.6%,
+    단순보유 −7.0%. 원인을 파고들었더니 데이터 문제가 아니라
+    급락·급반등이 반복된 장에서 주간 추세추종이 휘둘린 것이었다.</p>
 </div>
+
+<!-- 0 ------------------------------------------------------------------- -->
+<section>
+  <div class="head"><span class="num">00</span><h2>1차에서 뭘 고쳤나</h2></div>
+  <div class="layers">
+    <div class="layer fix">
+      <span class="tag ok">해결</span>
+      <div><p class="q">한국 표본이 9.8년, 2008년 위기가 없었다</p>
+        <p class="s">KOSPI 현물지수로 앞뒤를 이어 <strong>27.5년</strong>으로 확장.
+          IMF·닷컴·금융위기·코로나·긴축이 모두 표본에 들어왔다.</p></div>
+    </div>
+    <div class="layer fix">
+      <span class="tag warn">기각</span>
+      <div><p class="q">RISK 층 IC가 −0.10, 부호가 반대였다</p>
+        <p class="s">과거 IC로 규칙이 스스로 부호를 정하게 만들었으나
+          <strong>성과가 오히려 나빠져 채택하지 않았다.</strong> 게다가 27.5년 표본에서
+          RISK IC는 −0.037로 줄었다 — 1차의 −0.10은 표본 특유의 값이었다.</p></div>
+    </div>
+    <div class="layer fix">
+      <span class="tag warn">절반</span>
+      <div><p class="q">개선안이 결과를 본 뒤 나왔다 (데이터 스누핑)</p>
+        <p class="s">파라미터를 완전히 고정하고 후향 OOS 16.7년 + 전향 OOS 1년으로 재검증.
+          <strong>후향은 통과(+2.44%p), 전향은 실패(−8.65%p).</strong></p></div>
+    </div>
+    <div class="layer fix">
+      <span class="tag bad">미해결</span>
+      <div><p class="q">진짜 외국인 순매수가 없다</p>
+        <p class="s">공개 데이터에 KRX 투자자별 매매동향 시계열이 존재하지 않는다.
+          여전히 원/달러 추세로 대체하고 있고, 이게 가장 큰 약점으로 남았다.</p></div>
+    </div>
+  </div>
+
+  <h3>고치는 과정에서 나온 계산 버그 두 건</h3>
+  <p><strong>하나. 미국채 연결선물의 로그수익률이 폭주하고 있었다.</strong>
+    롤조정(back-adjusted) 연결가격은 롤 스프레드가 누적돼 레벨이 0 근처까지 내려간다.
+    US10은 1990–94년에 0.05까지 떨어졌고, 로그수익률로 계산하니
+    <em>하루 10%를 넘는 날이 110일</em> 나왔다. 10년 국채가 하루에 10% 움직이는 일은 없다.
+    전부 수치 인공물이었고 1차의 미국 백테스트가 여기 오염돼 있었다.
+    → 모멘텀 정규화를 <strong>차분 기반</strong>으로 교체했다.
+    롤조정 시계열은 레벨이 아니라 차분이 참값이다.</p>
+  <p><strong>둘. 달러지수가 1999년 이전 통째로 결측이었다.</strong>
+    유로가 1999년부터라, 6개 통화를 모두 요구하는 방식이 그 이전을 전부 버렸다.
+    → 레벨이 아니라 <strong>일간 변화율을 가중평균해 누적</strong>하고 결측 통화는
+    그날 가중치에서 빼는 방식으로 바꿔 1971년까지 복원했다.</p>
+</section>
 
 <!-- 1 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">01</span><h2>왜 4층으로 나누는가</h2></div>
-  <p class="lede">자금 흐름은 직접 관측할 수 없다. 우리가 볼 수 있는 건 돈이 지나간 뒤 남긴 흔적뿐이다.
-    그래서 외국인 순매수 하나 같은 단일 지표에 기대면 반드시 속는다.
-    성격이 다른 네 종류의 흔적을 나눠 보고, 서로 확인시킨다.</p>
+  <div class="head"><span class="num">01</span><h2>구조와 데이터</h2></div>
+  <p class="lede">자금 흐름은 직접 관측할 수 없다. 돈이 지나간 뒤 남긴 흔적만 보인다.
+    성격이 다른 네 층으로 나눠 서로 확인시킨다.</p>
 
   <div class="layers">
     <div class="layer">
@@ -203,13 +264,13 @@ footer a{color:var(--teal-ink)}
     <div class="layer">
       <span class="tag">RISK</span>
       <div><p class="q">위험을 감수할 분위기인가</p>
-        <p class="s">VIX 레벨과 20일 변화, 주식 대비 채권 상대강도</p></div>
+        <p class="s">VIX 레벨과 20일 변화, 주식−채권 상대강도</p></div>
       <span class="w">0.25</span>
     </div>
     <div class="layer">
       <span class="tag">FLOW</span>
       <div><p class="q">국경을 넘는 돈의 방향</p>
-        <p class="s">원/달러 60일 추세, 달러지수, 주식 대비 금 상대강도</p></div>
+        <p class="s">원/달러 추세, 달러지수, 주식−금 상대강도</p></div>
       <span class="w">0.25</span>
     </div>
     <div class="layer">
@@ -220,380 +281,439 @@ footer a{color:var(--teal-ink)}
     </div>
   </div>
 
-  <h3>단위를 시그마로 통일한다</h3>
-  <p>지표들의 단위가 제각각(수익률 %, VIX 포인트, 환율 원)이라 그대로 더할 수 없다. 두 가지로 나눠 표준화한다.</p>
-  <p><strong>모멘텀형</strong>은 변동성으로 나눈다 — <code>n일 수익률 ÷ (일간변동성 × √n)</code>.
-    60일 변동성만 있으면 계산되므로, 표본이 짧은 시장(KOSPI200 선물은 2014년부터)에서도
-    긴 캘리브레이션 기간을 낭비하지 않는다. 확장 z-score 대비 이게 결정적 이점이었다.
-    <strong>레벨형(VIX)</strong>만 확장 윈도 z-score를 쓴다. 레벨 자체에 정보가 있는 지표이기 때문이다.</p>
-  <p>둘 다 t시점까지의 데이터만 쓴다. <strong>미래참조(look-ahead)가 구조적으로 불가능하다.</strong>
-    층 가중치는 최적화하지 않고 경제적 논리로 사전에 고정했다 — 성과를 보고 조정하는 순간
-    백테스트는 자기실현적 거짓말이 된다.</p>
-
-  <h3>레짐 판정</h3>
-  <p><code>Flow Score = Σ (층 점수 × 가중치)</code>, 단위는 시그마.
-    <strong>+0.20 초과 = 확장</strong>(위험자산 100%), <strong>-0.20 ~ +0.20 = 중립</strong>(50%),
-    <strong>-0.20 미만 = 수축</strong>(전액 현금).
-    신호는 t일 종가로 계산하고 포지션은 t+1일부터 적용한다.</p>
+  <h3>KOSPI 27.5년을 어떻게 만들었나</h3>
+  <p>KOSPI200 선물 연결가격이 2014–2024년뿐이라 앞뒤를 현물지수로 이었다 —
+    <strong>현물 1997.07–2014.03 ⊕ 선물 2014.03–2024.03 ⊕ 현물 2024.04–2025.03</strong>.
+    레벨을 직접 붙이면 현물/선물의 절대수준 차이(배당·베이시스)가 가짜 점프로 들어가므로
+    <strong>일간 수익률 단위로 이어 누적</strong>했다.</p>
+  <p>현물 구간은 독립된 두 출처로 교차검증했다 —
+    <em>겹치는 1832일에서 최대오차 0.0000%</em>. 연말값도 실제 KOSPI와 맞는다
+    (1997년말 375, 2007년말 1897, 2008년말 1124, 2010년말 2051).</p>
+  <p class="note">여전히 대체값인 것: ① 외국인 순매수 → 원/달러 60일 추세.
+    ② 2024.04 이후 금·미국채 → 월간 계열(선물이 2024.03에 끝난다).
+    ②의 영향은 아래 03에서 따로 측정했다.</p>
 </section>
 
 <!-- 2 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">02</span><h2>백테스트 결과</h2></div>
-  <p>거래비용 편도 10bp, 현금 이자 0%(보수적 가정), 체결 지연 1영업일.
-    선물 연결가격이라 배당은 포함되지 않는다.</p>
+  <div class="head"><span class="num">02</span><h2>27.5년 백테스트</h2></div>
 
   <figure>
     <div class="figbar">
-      <span class="figttl">한국 · 누적수익 (로그 스케일)</span>
+      <span class="figttl">한국 27.5년 · 누적수익 (로그 스케일)</span>
       <span class="legend">
-        <span><i class="sw" style="background:#009C8C"></i>Flow Radar</span>
+        <span><i class="sw" style="background:#009C8C"></i>Flow Radar (정적×주말)</span>
         <span><i class="sw" style="background:#B4551F"></i>단순보유</span>
-        <span><i class="sw" style="background:var(--shade);height:11px;border-radius:1px"></i>수축 판정 구간</span>
+        <span><i class="sw" style="background:var(--shade);height:11px;border-radius:1px"></i>위기 구간</span>
       </span>
     </div>
     <div class="chartbox" id="cbox">
-      <svg id="curve" viewBox="0 0 900 340" role="img"
-           aria-label="KOSPI200 Flow Radar 전략과 단순보유의 누적수익 비교"></svg>
+      <svg id="curve" viewBox="0 0 900 360" role="img"
+           aria-label="1997년부터 2025년까지 KOSPI Flow Radar 전략과 단순보유의 누적수익 비교"></svg>
       <div class="tt" id="tt"></div>
     </div>
-    <figcaption>음영은 모델이 수축(Risk-Off)으로 판정해 전액 현금이던 구간.
-      2020년 3월 급락과 2022년 하락을 피했으나, 2020년 하반기 반등을 상당 부분 놓쳤다 —
-      월 1회 리밸런싱의 대가다.</figcaption>
+    <figcaption>파라미터를 27.5년 내내 하나도 바꾸지 않았다. 두 선의 간격 대부분이
+      2003년 이전에 벌어졌고, 그 뒤로는 거의 평행하게 간다 — 이 그림이 이 리포트의 핵심이다.</figcaption>
   </figure>
 
   <div class="scroll">
     <table>
-      <caption class="sr" style="position:absolute;left:-9999px">기본 규칙 성과 요약</caption>
-      <thead><tr><th>시장 · 전략</th><th>CAGR</th><th>변동성</th><th>샤프</th><th>MDD</th><th>칼마</th><th>회전율</th></tr></thead>
+      <thead><tr><th>규칙</th><th>CAGR</th><th>변동성</th><th>샤프</th><th>MDD</th><th>칼마</th><th>회전율</th></tr></thead>
       <tbody>
-        <tr><td>한국 · Flow Radar</td><td>2.50%</td><td class="best">10.96%</td><td>0.228</td><td class="best">-30.0%</td><td>0.083</td><td>3.3회</td></tr>
-        <tr class="bh"><td>한국 · 단순보유</td><td>4.46%</td><td>18.08%</td><td>0.247</td><td class="bad">-42.5%</td><td>0.105</td><td>—</td></tr>
-        <tr><td>미국 · Flow Radar</td><td>3.05%</td><td class="best">9.00%</td><td>0.338</td><td class="best">-24.7%</td><td class="best">0.123</td><td>3.2회</td></tr>
-        <tr class="bh"><td>미국 · 단순보유</td><td>5.49%</td><td>15.97%</td><td>0.344</td><td class="bad">-61.0%</td><td>0.090</td><td>—</td></tr>
+        <tr><td>정적 가중 × 월말</td><td>5.39%</td><td>15.30%</td><td>0.352</td><td>-41.5%</td><td>0.130</td><td>3.0회</td></tr>
+        <tr class="win"><td>정적 가중 × <b>주말</b></td><td class="best">6.42%</td><td>15.01%</td><td class="best">0.428</td><td class="best">-33.2%</td><td class="best">0.194</td><td>6.5회</td></tr>
+        <tr><td>동적 가중 × 월말</td><td>4.36%</td><td>15.31%</td><td>0.285</td><td>-36.7%</td><td>0.119</td><td>3.2회</td></tr>
+        <tr><td>동적 가중 × 주말</td><td>5.04%</td><td>15.15%</td><td>0.332</td><td>-36.7%</td><td>0.137</td><td>6.4회</td></tr>
+        <tr class="bh"><td>단순보유</td><td>5.55%</td><td class="bad">26.29%</td><td>0.211</td><td class="bad">-57.3%</td><td>0.097</td><td>—</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">돈을 더 버는 구조가 아니라, 같은 돈을 덜 흔들리며 버는 구조였다.
-    미국은 34년 표본에서 MDD를 -61%에서 -24.7%로 줄였다 — 칼마비율(수익/낙폭)은 오히려 앞선다.</p>
+
+  <h3>위기 구간 방어력</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>위기</th><th>전략</th><th>단순보유</th><th>평균 비중</th></tr></thead>
+      <tbody>
+        <tr><td>닷컴붕괴 2000.01–2001.09</td><td class="best">-25.0%</td><td class="bad">-53.3%</td><td>21%</td></tr>
+        <tr><td>금융위기 2007.11–2009.03</td><td class="best">-17.3%</td><td class="bad">-41.6%</td><td>22%</td></tr>
+        <tr><td>차이나쇼크 2015.06–2016.02</td><td class="best">-5.4%</td><td>-10.1%</td><td>28%</td></tr>
+        <tr><td>코로나 2020.02–2020.03</td><td class="best">-5.4%</td><td class="bad">-17.7%</td><td>24%</td></tr>
+        <tr><td>긴축 2022.01–2022.10</td><td class="best">+0.8%</td><td class="bad">-25.1%</td><td>1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">다섯 번의 위기에서 모두 손실을 절반 이하로 줄였다.
+    2022년 긴축장에서는 평균비중 1%로 사실상 전액 현금이었고 플러스로 마감했다.</p>
 </section>
 
 <!-- 3 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">03</span><h2>진단 — 어느 층이 진짜 일하는가</h2></div>
-  <p class="lede">거래규칙과 무관하게, 신호 자체가 미래 수익을 설명하는지 본다.
-    정보계수(IC)는 Flow Score와 이후 수익률의 순위상관이다.
-    실무에서는 <strong>0.03을 넘으면 쓸 만한 신호</strong>로 본다.</p>
+  <div class="head"><span class="num">03</span><h2>이 숫자를 믿기 전에</h2></div>
 
-  <figure>
-    <div class="figbar">
-      <span class="figttl">60일 정보계수 (IC)</span>
-      <span class="legend">
-        <span><i class="sw" style="background:#009C8C"></i>예측력 있음 (+)</span>
-        <span><i class="sw" style="background:#B4551F"></i>부호가 반대 (−)</span>
-      </span>
-    </div>
-    <div class="chartbox">
-      <svg id="ic" viewBox="0 0 900 300" role="img"
-           aria-label="층별 60일 정보계수 막대그래프"></svg>
-    </div>
-    <figcaption>한국은 FLOW 층이 0.113으로 압도적. 미국은 COST 층만 유의미하다.
-      두 시장 모두 RISK 층은 -0.10 — 부호가 반대다.</figcaption>
-  </figure>
-
-  <p><strong>읽어야 할 세 가지.</strong></p>
-  <p><strong>하나.</strong> FLOW 층이 한국 시장의 유일한 안정적 알파원이다.
-    1·5·20·60일 전 구간에서 양(+)이고, 60일 IC 0.113은 실무적으로 충분히 크다.
-    이걸 환율 프록시만으로 얻었다는 게 핵심이다 — 진짜 외국인 수급을 넣으면 더 나아질 여지가 크다.</p>
-  <p><strong>둘.</strong> RISK 층의 부호가 틀렸다. 양 시장 모두 20·60일 IC가 -0.10.
-    "VIX가 낮으니 사라"는 통념이 데이터에서 정확히 반대로 나온다.
-    <em>VIX는 순응지표가 아니라 역발상 지표로 써야 한다.</em>
-    지금은 이 층이 전체 점수를 깎아먹고 있다.</p>
-  <p><strong>셋.</strong> 미국 대형주에서는 이 신호 체계가 방향을 못 맞춘다.
-    대신 변동성은 잘 맞춘다 — 수축 판정 구간의 실현 변동성 26.4% 대 확장 구간 9.8%.
-    미국에서는 진입 타이밍이 아니라 포지션 크기 조절에만 써야 한다는 뜻이다.</p>
-
-  <h3>레짐 판정 다음날, 실제로 무슨 일이 있었나</h3>
+  <h3>초과수익은 사실상 첫 6년이 전부다</h3>
   <div class="scroll">
     <table>
-      <thead><tr><th>레짐</th><th>한국 · 연율수익</th><th>한국 · 비중</th><th>미국 · 연율수익</th><th>미국 · 변동성</th></tr></thead>
+      <thead><tr><th>구간</th><th>전략 CAGR</th><th>보유 CAGR</th><th>초과</th><th>전략 샤프</th><th>보유 샤프</th></tr></thead>
       <tbody>
-        <tr><td>확장 (Risk-On)</td><td class="best">+12.6%</td><td>39.9%</td><td>+5.1%</td><td>9.8%</td></tr>
-        <tr><td>중립 (Neutral)</td><td>+11.3%</td><td>29.1%</td><td>+6.8%</td><td>14.0%</td></tr>
-        <tr><td>수축 (Risk-Off)</td><td class="bad">-7.2%</td><td>31.0%</td><td>+9.5%</td><td class="bad">26.4%</td></tr>
+        <tr class="win"><td>1997–2003 (IMF·닷컴)</td><td>12.54%</td><td>3.48%</td><td class="best">+9.06%p</td><td>0.553</td><td>0.086</td></tr>
+        <tr><td>2004–2014</td><td>7.27%</td><td>8.90%</td><td class="bad">-1.63%p</td><td class="best">0.552</td><td>0.398</td></tr>
+        <tr><td>2014–2024 (설계표본)</td><td>4.21%</td><td>4.77%</td><td class="bad">-0.56%p</td><td class="best">0.398</td><td>0.266</td></tr>
+        <tr><td>2024–2025 (전향 OOS)</td><td>-15.61%</td><td>-6.96%</td><td class="bad">-8.65%p</td><td>-1.775</td><td>-0.356</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">한국은 완벽한 단조 순서다 — 수축 판정 구간에서 코스피는 실제로 연 -7.2%였다.
-    미국은 순서가 뒤집혔지만 변동성만큼은 3배 가까이 벌어진다.</p>
+  <p><strong>CAGR 초과수익은 1997–2003 한 구간에서 전부 나왔다.</strong>
+    그 뒤 21년은 CAGR로는 계속 뒤지고 샤프와 MDD로만 이긴다.
+    1997–2003은 IMF 직후와 닷컴 붕괴가 겹쳐 한국 시장이 극단적으로 흔들린 시기라
+    방어 전략에 특히 유리했다.
+    이걸 "27년 백테스트에서 시장을 이겼다"로 요약하면 거짓말에 가깝다.
+    정확한 요약은 <em>"위기가 잦은 시장에서 위험조정 성과를 개선한다"</em>이다.</p>
+
+  <h3>62%의 해에 시장에 진다</h3>
+  <figure>
+    <div class="figbar">
+      <span class="figttl">롤링 1년 초과수익 분포 (27.5년, 정적×주말)</span>
+      <span class="legend">
+        <span><i class="sw" style="background:#009C8C"></i>시장을 이긴 해</span>
+        <span><i class="sw" style="background:#B4551F"></i>시장에 진 해</span>
+      </span>
+    </div>
+    <div class="chartbox">
+      <svg id="hist" viewBox="0 0 900 300" role="img"
+           aria-label="롤링 1년 초과수익의 분포 히스토그램"></svg>
+    </div>
+    <figcaption>중앙값 −2.97%p, 시장을 이긴 비율 38.3%.
+      전향 OOS 구간(−9.8%p)은 이 분포의 백분위 26.8% — 과거에 흔히 겪던 수준의
+      부진이지 전례 없는 붕괴가 아니다. 5년 중 3년은 "시장보다 못하네"를 견뎌야 한다.</figcaption>
+  </figure>
+
+  <h3>전향 OOS 실패의 원인 — 데이터가 아니라 신호였다</h3>
+  <p>월간 대체 데이터 오염을 의심해 그 영향을 받는 COST 층을 통째로 빼고 다시 돌렸다.</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>신호 구성</th><th>후향 OOS 1997–2014</th><th>설계표본 2014–2024</th><th>전향 OOS 2024–2025</th></tr></thead>
+      <tbody>
+        <tr><td>4층 전체</td><td class="best">+2.44%p</td><td>-0.56%p</td><td class="bad">-8.65%p</td></tr>
+        <tr><td>COST 제외 (3층)</td><td class="best">+3.92%p</td><td>-2.05%p</td><td class="bad">-6.22%p</td></tr>
+        <tr><td>TREND+FLOW 만</td><td class="best">+1.45%p</td><td>-1.55%p</td><td class="bad">-10.33%p</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>COST를 빼도 실패가 남는다.</strong> 데이터 오염이 원인의 전부가 아니다.
+    층별 점수를 보면 이 기간 FLOW 층 평균이 <strong>−0.591</strong>(설계표본 −0.062)로
+    모델은 내내 "자금 유출"을 외쳤다. 원/달러가 1350→1470으로 급등했으니
+    신호 자체는 정확했다. 그런데도 졌다 — 급락과 급반등이 반복된 장에서
+    <em>주간 추세추종이 휘둘린(whipsaw) 것</em>이다.
+    같은 구간 월말 리밸런싱은 −1.68%p로 훨씬 나았다.</p>
 </section>
 
 <!-- 4 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">04</span><h2>월 1회 리밸런싱이 정보를 썩힌다</h2></div>
-  <p>신호는 매일 갱신되는데 반영은 한 달에 한 번. 진단에서 이 불일치가 드러나
-    <strong>주간 리밸런싱</strong>과 <strong>연속형 비중</strong>, <strong>변동성 타게팅</strong>을
-    대안 규칙으로 정의해 다시 돌렸다. 아래는 현금이자 2%(CMA·단기채 현실값) 가정이다.</p>
-
-  <h3>한국 (KOSPI200)</h3>
+  <div class="head"><span class="num">04</span><h2>동적 IC 가중은 기각한다</h2></div>
+  <p class="lede">"RISK 층 IC가 −0.10이니 부호를 뒤집자"를 사람이 손으로 하면 데이터 스누핑이다.
+    그래서 과거 IC만 보고 규칙이 스스로 부호를 정하게 만들었다 —
+    IC &gt; +0.02면 그대로, &lt; −0.02면 뒤집기, 사이면 그 층은 쉼.</p>
   <div class="scroll">
     <table>
-      <thead><tr><th>규칙</th><th>CAGR</th><th>변동성</th><th>샤프</th><th>MDD</th><th>칼마</th></tr></thead>
+      <thead><tr><th>층</th><th>그대로 (+1)</th><th>쉼 (0)</th><th>뒤집음 (−1)</th></tr></thead>
       <tbody>
-        <tr><td>V0 3단계 × 월말</td><td>3.44%</td><td>10.96%</td><td>0.313</td><td>-28.3%</td><td>0.121</td></tr>
-        <tr class="win"><td>V1 3단계 × <b>주말</b></td><td class="best">5.36%</td><td>10.82%</td><td class="best">0.495</td><td>-19.8%</td><td>0.271</td></tr>
-        <tr><td>V2 연속형 × 주말</td><td>4.78%</td><td>10.41%</td><td>0.459</td><td>-17.0%</td><td class="best">0.281</td></tr>
-        <tr><td>V3 연속형 + 변동성타겟</td><td>2.67%</td><td class="best">6.48%</td><td>0.412</td><td class="best">-10.8%</td><td>0.246</td></tr>
-        <tr class="bh"><td>단순보유</td><td>4.46%</td><td>18.08%</td><td>0.247</td><td>-42.5%</td><td>0.105</td></tr>
+        <tr><td>TREND</td><td>100.0%</td><td>0.0%</td><td>0.0%</td></tr>
+        <tr><td>RISK</td><td>55.9%</td><td class="best">44.1%</td><td>0.0%</td></tr>
+        <tr><td>FLOW</td><td>80.0%</td><td>20.0%</td><td>0.0%</td></tr>
+        <tr><td>COST</td><td>10.0%</td><td>23.4%</td><td class="bad">66.6%</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note">V1이 단순보유를 <strong>수익률·변동성·MDD·샤프 전 항목</strong>에서 이겼다.
-    CAGR +0.9%p, 변동성 40% 축소, MDD 절반 이하, 샤프 2배.</p>
+  <p><strong>규칙은 RISK를 한 번도 뒤집지 않았다.</strong> 대신 44%의 기간 쉬게 했고,
+    엉뚱하게 COST를 67% 뒤집었다. 성과도 정적 가중보다 나빴다 —
+    한국 샤프 0.332 대 0.428, 미국 0.276 대 0.467.
+    <strong>IC 추정 자체가 너무 불안정해서, IC로 가중치를 정하면 잡음을 증폭시킨다.</strong></p>
 
-  <h3>미국 (S&amp;P500)</h3>
-  <div class="scroll">
-    <table>
-      <thead><tr><th>규칙</th><th>CAGR</th><th>변동성</th><th>샤프</th><th>MDD</th><th>칼마</th></tr></thead>
-      <tbody>
-        <tr><td>V0 3단계 × 월말</td><td>3.76%</td><td>9.00%</td><td>0.417</td><td>-20.3%</td><td>0.185</td></tr>
-        <tr><td>V2 연속형 × 주말</td><td>3.40%</td><td>7.99%</td><td>0.426</td><td>-26.1%</td><td>0.130</td></tr>
-        <tr class="win"><td>V3 연속형 + <b>변동성타겟</b></td><td>3.13%</td><td class="best">6.45%</td><td class="best">0.486</td><td class="best">-15.0%</td><td class="best">0.209</td></tr>
-        <tr class="bh"><td>단순보유</td><td>5.49%</td><td>15.97%</td><td>0.344</td><td>-61.0%</td><td>0.090</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="note">미국에서는 어떤 변형도 CAGR로 단순보유를 이기지 못한다 — 03의 IC 진단과 정확히 일치한다.
-    다만 V3는 샤프 0.486 대 0.344, MDD -15% 대 -61%로 위험조정 기준에서는 확실히 우월하다.</p>
+  <h3>그리고 1차의 "RISK 부호가 틀렸다"는 과한 주장이었다</h3>
+  <p>10년 표본에서 −0.10이던 RISK 층 60일 IC는 27.5년 표본에서 <strong>−0.037</strong>로 줄었다.
+    −0.10은 표본 특유의 값이었다. 짧은 표본의 IC로 층 부호를 판단하면 안 된다.</p>
 
-  <h3>파라미터를 흔들어도 결론이 유지되는가</h3>
-  <p>임계값 5종 × 비용 3종 × 주기 2종, 총 30조합을 돌렸다.
-    한국에서는 <strong>다섯 개 임계값 전부에서 주간이 월간보다 우월</strong>했다.
-    특정 파라미터의 운이 아니라 구조적 결과다.</p>
-  <div class="scroll">
-    <table>
-      <thead><tr><th>KOSPI 임계값 (σ)</th><th>0.0</th><th>0.1</th><th>0.2</th><th>0.3</th><th>0.4</th></tr></thead>
-      <tbody>
-        <tr><td>월말 리밸런싱 샤프</td><td>0.22</td><td>0.25</td><td>0.23</td><td>0.16</td><td>0.19</td></tr>
-        <tr class="win"><td>주말 리밸런싱 샤프</td><td>0.34</td><td>0.31</td><td class="best">0.41</td><td>0.38</td><td>0.33</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <figure>
+    <div class="figbar">
+      <span class="figttl">27.5년 표본 정보계수 — 60일 대 120일</span>
+      <span class="legend">
+        <span><i class="sw" style="background:#009C8C"></i>예측력 있음 (+)</span>
+        <span><i class="sw" style="background:#B4551F"></i>부호 반대 (−)</span>
+      </span>
+    </div>
+    <div class="chartbox">
+      <svg id="ic" viewBox="0 0 900 300" role="img"
+           aria-label="27.5년 표본 층별 정보계수 60일과 120일 비교"></svg>
+    </div>
+    <figcaption>가장 중요한 발견이 여기 있다 —
+      <strong>FLOW 층의 예측력은 120일에서 가장 강하다(0.124).</strong>
+      자금 흐름은 느린 변수다. 그런데 현재 FLOW 층 지표는 전부 60일 창을 쓴다. 지평이 맞지 않는다.</figcaption>
+  </figure>
 </section>
 
 <!-- 5 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">05</span><h2>워크포워드 — 성과가 한 구간에 몰려 있나</h2></div>
-  <p>표본을 3등분해 각 구간을 따로 측정했다.</p>
+  <div class="head"><span class="num">05</span><h2>대조군</h2></div>
+  <h3>국채를 KR10 → US10으로 바꾼 게 결과를 왜곡했나</h3>
+  <p>장기 설정은 한국 국채선물이 2014년부터뿐이라 미국채를 쓴다. 같은 구간에서 비교하면:</p>
   <div class="scroll">
     <table>
-      <thead><tr><th>구간</th><th>전략 CAGR</th><th>보유 CAGR</th><th>초과</th><th>전략 MDD</th><th>보유 MDD</th></tr></thead>
+      <thead><tr><th>2014–2024 · 주말</th><th>CAGR</th><th>샤프</th><th>MDD</th></tr></thead>
       <tbody>
-        <tr><td>한국 2014.06–2017.09</td><td>5.27%</td><td>5.61%</td><td>-0.34%p</td><td class="best">-11.9%</td><td>-21.1%</td></tr>
-        <tr><td>한국 2017.09–2021.01</td><td>4.50%</td><td>10.79%</td><td class="bad">-6.29%p</td><td class="best">-30.0%</td><td>-42.5%</td></tr>
-        <tr><td>한국 2021.01–2024.03</td><td>-2.19%</td><td>-2.75%</td><td>+0.56%p</td><td class="best">-22.6%</td><td>-35.8%</td></tr>
-        <tr><td>미국 1990.01–2001.09</td><td>1.89%</td><td>3.41%</td><td>-1.52%p</td><td class="best">-16.6%</td><td>-30.0%</td></tr>
-        <tr><td>미국 2001.09–2013.03</td><td>3.11%</td><td>2.43%</td><td>+0.68%p</td><td class="best">-21.2%</td><td>-56.6%</td></tr>
-        <tr><td>미국 2013.03–2024.03</td><td>4.22%</td><td>11.10%</td><td class="bad">-6.88%p</td><td class="best">-21.9%</td><td>-33.0%</td></tr>
+        <tr><td>국채 KR10 (원본)</td><td>3.85%</td><td>0.358</td><td>-20.9%</td></tr>
+        <tr><td>국채 US10 (장기설정)</td><td>4.05%</td><td>0.381</td><td>-18.8%</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="note"><strong>MDD는 6개 구간 전부에서 전략이 이겼다.</strong>
-    수익률은 강세장 구간(한국 2017–21, 미국 2013–24)에서 크게 뒤진다 —
-    방어 오버레이의 구조적 대가이며, 버그가 아니라 설계의 결과다.</p>
+  <p class="note">차이가 미미하다. 장기 결과가 국채 대체 때문에 나온 것이 아님을 확인했다.</p>
+
+  <h3>미국 S&amp;P500 34.2년</h3>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>규칙</th><th>CAGR</th><th>변동성</th><th>샤프</th><th>MDD</th><th>칼마</th></tr></thead>
+      <tbody>
+        <tr class="win"><td>정적 × <b>월말</b></td><td>4.10%</td><td class="best">8.78%</td><td class="best">0.467</td><td class="best">-21.7%</td><td class="best">0.189</td></tr>
+        <tr><td>정적 × 주말</td><td>2.89%</td><td>8.25%</td><td>0.350</td><td>-24.8%</td><td>0.117</td></tr>
+        <tr><td>동적 × 월말</td><td>3.35%</td><td>12.14%</td><td>0.276</td><td>-51.2%</td><td>0.065</td></tr>
+        <tr><td>동적 × 주말</td><td>4.53%</td><td>12.32%</td><td>0.368</td><td>-43.4%</td><td>0.104</td></tr>
+        <tr class="bh"><td>단순보유</td><td>5.49%</td><td>15.97%</td><td>0.344</td><td class="bad">-61.0%</td><td>0.090</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>미국은 월말이, 한국은 주말이 낫다.</strong> 리밸런싱 주기를 시장 공통으로
+    정할 수 없다는 뜻이다 — 1차에서 "주간이 우월하다"고 일반화한 것도 과했다.</p>
 </section>
 
 <!-- 6 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">06</span><h2>이 백테스트를 믿지 말아야 할 이유</h2></div>
+  <div class="head"><span class="num">06</span><h2>남은 한계</h2></div>
   <ol class="caveats">
-    <li><b>진짜 외국인 순매수를 못 썼다.</b> 실행 환경의 방화벽 때문에 KRX에 접속하지 못해
-      원/달러 60일 모멘텀으로 대체했다. 원화 강세 = 외국인 유입이라는 관계는 강하지만 완전하지 않다.
-      이게 가장 큰 약점이다.</li>
-    <li><b>한국 표본이 9.8년뿐이다.</b> 2008년 금융위기가 표본에 없다.
-      레짐 전략의 진짜 시험대는 대형 위기인데 한국 쪽은 2020년 코로나 하나뿐이다.</li>
-    <li><b>선물 연결가격은 배당을 포함하지 않는다.</b> 실제 ETF 운용 시에는 배당만큼 유리해진다.
+    <li><b>진짜 외국인 순매수가 여전히 없다.</b> 공개 데이터에 KRX 투자자별 매매동향
+      시계열이 존재하지 않는다. 사용자 PC에서 pykrx로 교체해야 한다.</li>
+    <li><b>전향 OOS가 1년뿐이다.</b> KOSPI 공개 시계열이 2025년 3월에서 끝난다.
+      2025년 4월 이후는 아직 아무것도 검증되지 않았다.</li>
+    <li><b>선물 연결가격은 배당을 포함하지 않는다.</b> 실제 ETF 운용 시 유리해지고,
       반대로 롤오버 비용과 괴리율은 반영되지 않았다.</li>
-    <li><b>거래비용 10bp는 ETF 기준이다.</b> 개별주 바스켓으로 구현하면 슬리피지가 훨씬 크고,
-      주간 리밸런싱은 회전율이 연 7회로 뛴다.</li>
-    <li><b>변형 규칙 V1–V3는 완전한 아웃오브샘플이 아니다.</b> 규칙 자체는 사전 정의했지만
-      "월간이 느리다"는 진단은 V0 결과를 본 뒤에 나왔다.
-      실전 투입 전 2024년 4월 이후 데이터로 순수 검증을 반드시 거쳐야 한다.</li>
+    <li><b>주간 리밸런싱은 회전율 연 6.5회.</b> ETF 기준 10bp면 감당되지만
+      개별주 바스켓이면 슬리피지가 훨씬 크다.</li>
+    <li><b>2024년 4월 이후 금·국채가 월간 대체값이다.</b> 전향 OOS 구간에만
+      해당하고 영향을 측정했지만, 완전히 제거하지는 못했다.</li>
   </ol>
 </section>
 
 <!-- 7 ------------------------------------------------------------------- -->
 <section>
-  <div class="head"><span class="num">07</span><h2>다음에 할 일</h2></div>
+  <div class="head"><span class="num">07</span><h2>다음 검증 과제</h2></div>
   <div class="steps">
     <div class="step p1"><span class="pr">01</span>
-      <p><b>RISK 층 부호 재검토.</b> IC가 -0.10인 층을 그대로 두는 건 낭비다.
-        VIX를 역발상 지표로 뒤집은 버전을 별도 가설로 세워 검증한다.
-        이게 가장 값싸고 효과가 클 수정이다.</p></div>
+      <p><b>FLOW 층 지평을 60일 → 120일로.</b> IC 0.050 대 0.124.
+        가장 크고 값싼 개선점이다. 단 이 표본에서 좋아지는 걸 확인하고 채택하면
+        스누핑이므로, <b>별도 가설로 세워 새 구간에서 검증할 것.</b></p></div>
     <div class="step p1"><span class="pr">02</span>
-      <p><b>진짜 수급 투입.</b> pykrx로 외국인·기관 순매수 20일 누적을 시가총액으로 나눠
-        FLOW 층에 추가한다. 개인 순매수는 역지표로. KRX 수급은 장 마감 후 18시에 확정되므로
+      <p><b>진짜 수급 투입.</b> pykrx로 외국인·기관 순매수 20일 누적 ÷ 시가총액을
+        FLOW 층에 추가. 개인 순매수는 역지표로. KRX 수급은 장 마감 후 18시 확정이라
         다음날 포지션에 쓰는 것은 look-ahead가 아니다.</p></div>
     <div class="step"><span class="pr">03</span>
-      <p><b>업종 로테이션으로 확장.</b> 지금은 "살까/말까"만 판단한다.
-        확장 레짐일 때 <em>어느 업종</em>으로 갈지는 아직 안 푼 문제다.
-        KRX 업종지수 + 업종별 외국인 수급이 다음 재료.</p></div>
+      <p><b>whipsaw 억제.</b> 전향 OOS 실패의 직접 원인이다.
+        레짐 전환에 확인 기간(예: 2주 연속 같은 판정일 때만 전환)을 넣는 안을 별도 검증.</p></div>
     <div class="step"><span class="pr">04</span>
-      <p><b>순수 아웃오브샘플 검증.</b> 파라미터를 완전히 고정한 채
-        2024년 4월 이후 구간에서만 성과를 확인한다. 여기서 무너지면 앞의 모든 숫자가 무의미하다.</p></div>
+      <p><b>업종 로테이션.</b> 지금은 "살까/말까"만 판단한다.
+        확장 레짐일 때 <em>어느 업종</em>으로 갈지는 아직 안 푼 문제다.</p></div>
   </div>
 </section>
 
 <footer>
-  데이터 · KOSPI200/S&amp;P500/국채/금 선물 연결가격 (pysystemtrade) · USD/KRW 및 달러지수 일간 (미 연준 H.10) · VIX 현물 (CBOE)<br>
-  코드 · <code>quant/market-flow/</code> — <code>flow_radar.py</code> 엔진, <code>run_backtest.py</code> 기본검증,
-  <code>run_variants.py</code> IC·변형, <code>adapters_kr.py</code> 국내 수급 어댑터<br>
+  데이터 · KOSPI 현물지수(교차검증 2출처) ⊕ KOSPI200 선물 (pysystemtrade) ·
+  S&amp;P500·국채·금 선물 · USD/KRW 및 달러지수 (미 연준 H.10) · VIX 현물 (CBOE) ·
+  금·미10년 월간 (datasets)<br>
+  코드 · <code>quant/market-flow/</code> — <code>flow_radar.py</code> 엔진,
+  <code>run_extended.py</code> 27.5년 검증, <code>adapters_kr.py</code> 국내 수급 어댑터<br>
   과거 성과는 미래 수익을 보장하지 않는다. 이 문서는 투자 권유가 아니다.
 </footer>
 
 </div>
 
 <script>
-const KO = {"d": ["14.06", "14.07", "14.08", "14.09", "14.10", "14.11", "14.12", "15.01", "15.02", "15.03", "15.04", "15.05", "15.06", "15.07", "15.08", "15.09", "15.10", "15.11", "15.12", "16.01", "16.02", "16.03", "16.04", "16.05", "16.06", "16.07", "16.08", "16.09", "16.10", "16.11", "16.12", "17.01", "17.02", "17.03", "17.04", "17.05", "17.06", "17.07", "17.08", "17.09", "17.10", "17.11", "17.12", "18.01", "18.02", "18.03", "18.04", "18.05", "18.06", "18.07", "18.08", "18.09", "18.10", "18.11", "18.12", "19.01", "19.02", "19.03", "19.04", "19.05", "19.06", "19.07", "19.08", "19.09", "19.10", "19.11", "19.12", "20.01", "20.02", "20.03", "20.04", "20.05", "20.06", "20.07", "20.08", "20.09", "20.10", "20.11", "20.12", "21.01", "21.02", "21.03", "21.04", "21.05", "21.06", "21.07", "21.08", "21.09", "21.10", "21.11", "21.12", "22.01", "22.02", "22.03", "22.04", "22.05", "22.06", "22.07", "22.08", "22.09", "22.10", "22.11", "22.12", "23.01", "23.02", "23.03", "23.04", "23.05", "23.06", "23.07", "23.08", "23.09", "23.10", "23.11", "23.12", "24.01", "24.02", "24.03"], "s": [1.0, 1.021, 0.996, 0.977, 0.977, 0.977, 0.961, 0.974, 0.977, 0.986, 1.028, 1.0, 0.98, 0.979, 0.979, 0.979, 1.008, 0.986, 0.982, 0.964, 0.963, 0.963, 0.958, 0.949, 0.949, 0.966, 0.98, 0.989, 0.979, 0.978, 0.996, 1.015, 1.016, 1.062, 1.087, 1.157, 1.181, 1.194, 1.174, 1.2, 1.268, 1.233, 1.244, 1.28, 1.192, 1.196, 1.21, 1.185, 1.184, 1.184, 1.184, 1.196, 1.039, 1.038, 1.038, 1.038, 1.025, 0.997, 1.012, 0.965, 0.964, 0.945, 0.928, 0.928, 0.935, 0.938, 0.974, 0.938, 0.91, 0.91, 0.91, 0.91, 0.956, 1.026, 1.052, 1.059, 1.047, 1.116, 1.243, 1.348, 1.339, 1.348, 1.36, 1.378, 1.416, 1.368, 1.36, 1.33, 1.329, 1.329, 1.329, 1.251, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.169, 1.168, 1.137, 1.148, 1.153, 1.175, 1.174, 1.198, 1.155, 1.154, 1.154, 1.154, 1.242, 1.149, 1.183, 1.274], "b": [0.988, 1.031, 1.006, 0.969, 0.941, 0.956, 0.926, 0.95, 0.955, 0.974, 1.016, 0.987, 0.949, 0.913, 0.862, 0.883, 0.937, 0.916, 0.908, 0.875, 0.887, 0.929, 0.924, 0.916, 0.915, 0.948, 0.962, 0.971, 0.962, 0.952, 0.988, 1.025, 1.027, 1.074, 1.099, 1.169, 1.194, 1.206, 1.187, 1.213, 1.282, 1.246, 1.257, 1.294, 1.205, 1.213, 1.242, 1.19, 1.151, 1.143, 1.132, 1.156, 1.004, 1.035, 1.008, 1.109, 1.097, 1.067, 1.1, 1.0, 1.07, 1.027, 0.991, 1.044, 1.062, 1.066, 1.148, 1.107, 1.04, 0.91, 1.0, 1.037, 1.091, 1.171, 1.201, 1.216, 1.203, 1.368, 1.524, 1.654, 1.643, 1.665, 1.693, 1.717, 1.764, 1.704, 1.686, 1.612, 1.56, 1.54, 1.605, 1.422, 1.45, 1.482, 1.439, 1.435, 1.244, 1.309, 1.299, 1.139, 1.203, 1.283, 1.201, 1.313, 1.28, 1.305, 1.316, 1.367, 1.366, 1.393, 1.343, 1.313, 1.231, 1.347, 1.452, 1.343, 1.424, 1.534], "w": [0.0, 0.5, 1.0, 0.5, 0.0, 0.0, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 0.5, 0.0, 0.0, 0.0, 0.5, 1.0, 0.5, 0.5, 0.0, 0.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.5, 0.5, 0.0, 0.5, 0.5, 0.0, 0.5, 1.0, 0.5, 1.0, 0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.5, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 0.5, 0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.5, 1.0]};
-</script>
-<script>
+const K27={"d": ["1997.09", "1997.12", "1998.03", "1998.06", "1998.09", "1998.12", "1999.03", "1999.06", "1999.09", "1999.12", "2000.03", "2000.06", "2000.09", "2000.12", "2001.03", "2001.06", "2001.09", "2001.12", "2002.03", "2002.06", "2002.09", "2002.12", "2003.03", "2003.06", "2003.09", "2003.12", "2004.03", "2004.06", "2004.09", "2004.12", "2005.03", "2005.06", "2005.09", "2005.12", "2006.03", "2006.06", "2006.09", "2006.12", "2007.03", "2007.06", "2007.09", "2007.12", "2008.03", "2008.06", "2008.09", "2008.12", "2009.03", "2009.06", "2009.09", "2009.12", "2010.03", "2010.06", "2010.09", "2010.12", "2011.03", "2011.06", "2011.09", "2011.12", "2012.03", "2012.06", "2012.09", "2012.12", "2013.03", "2013.06", "2013.09", "2013.12", "2014.03", "2014.06", "2014.09", "2014.12", "2015.03", "2015.06", "2015.09", "2015.12", "2016.03", "2016.06", "2016.09", "2016.12", "2017.03", "2017.06", "2017.09", "2017.12", "2018.03", "2018.06", "2018.09", "2018.12", "2019.03", "2019.06", "2019.09", "2019.12", "2020.03", "2020.06", "2020.09", "2020.12", "2021.03", "2021.06", "2021.09", "2021.12", "2022.03", "2022.06", "2022.09", "2022.12", "2023.03", "2023.06", "2023.09", "2023.12", "2024.03", "2024.06", "2024.09", "2024.12", "2025.03"], "s": [1.0, 1.005, 0.932, 0.872, 0.877, 1.301, 1.326, 1.834, 1.777, 1.905, 1.702, 1.733, 1.557, 1.565, 1.527, 1.516, 1.429, 1.748, 2.152, 1.851, 1.784, 1.695, 1.714, 1.848, 1.923, 2.096, 2.277, 2.162, 2.21, 2.371, 2.556, 2.611, 3.163, 3.393, 3.296, 3.067, 3.163, 3.308, 3.244, 3.892, 4.11, 3.607, 3.59, 3.519, 3.536, 3.554, 3.524, 3.843, 4.604, 4.378, 4.377, 4.083, 4.356, 4.771, 4.745, 4.654, 4.408, 4.093, 4.345, 4.245, 4.472, 4.451, 4.383, 4.26, 4.348, 4.346, 4.291, 4.242, 4.161, 4.151, 4.134, 4.099, 4.056, 3.978, 3.962, 3.742, 3.835, 3.842, 4.176, 4.614, 4.613, 4.781, 4.602, 4.513, 4.579, 4.44, 4.42, 4.334, 4.317, 4.574, 4.17, 4.441, 4.891, 6.051, 6.614, 6.954, 6.328, 6.354, 6.332, 6.363, 6.395, 6.054, 6.069, 6.159, 5.719, 6.352, 6.487, 6.355, 5.945, 5.786, 5.524], "b": [0.989, 0.573, 0.735, 0.455, 0.474, 0.86, 0.946, 1.349, 1.278, 1.571, 1.316, 1.255, 0.937, 0.771, 0.8, 0.909, 0.733, 1.06, 1.369, 1.135, 0.988, 0.959, 0.819, 1.024, 1.066, 1.239, 1.346, 1.201, 1.276, 1.369, 1.476, 1.541, 1.866, 2.108, 2.078, 1.979, 2.096, 2.192, 2.22, 2.665, 2.975, 2.899, 2.604, 2.56, 2.213, 1.718, 1.843, 2.124, 2.557, 2.572, 2.587, 2.595, 2.862, 3.134, 3.219, 3.21, 2.704, 2.79, 3.078, 2.833, 3.051, 3.052, 3.064, 2.848, 3.052, 3.074, 3.024, 3.036, 2.98, 2.846, 2.993, 2.917, 2.714, 2.793, 2.855, 2.813, 2.987, 3.037, 3.301, 3.671, 3.729, 3.865, 3.729, 3.538, 3.555, 3.099, 3.28, 3.289, 3.21, 3.531, 2.798, 3.355, 3.74, 4.686, 5.119, 5.424, 4.956, 4.934, 4.557, 3.826, 3.502, 3.692, 4.011, 4.2, 4.035, 4.464, 4.717, 4.813, 4.451, 4.119, 4.405], "w": [0.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 1.0, 1.0, 0.5, 0.0, 0.5, 0.0, 1.0, 0.5, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.0, 1.0, 1.0, 0.5, 1.0, 1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.5, 0.5, 1.0, 1.0, 1.0, 0.5, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.5, 0.5, 1.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.5, 0.0, 0.5, 1.0, 0.0, 1.0, 0.5, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.5, 0.5, 0.0, 0.5]};
+const HIST={"edges": [-60.0, -55.0, -50.0, -45.0, -40.0, -35.0, -30.0, -25.0, -20.0, -15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0], "n": [83, 5, 10, 23, 48, 62, 76, 98, 392, 919, 1032, 1281, 961, 465, 379, 239, 150, 184, 66, 55, 6, 0, 0, 0], "median": -2.96, "winrate": 38.3, "oos": -9.82};
 (function(){
   const css = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
   const NS = "http://www.w3.org/2000/svg";
   const el = (n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const txt = (e,s)=>{e.textContent=s;return e;};
 
-  /* ---------- 1. 누적곡선 (log) ---------- */
+  const CRISES = [
+    ["2000.03","2001.09","닷컴"],
+    ["2007.12","2009.03","금융위기"],
+    ["2020.03","2020.06","코로나"],
+    ["2022.03","2022.09","긴축"],
+  ];
+
+  /* ---------- 1. 27.5년 누적곡선 ---------- */
   function drawCurve(){
-    const svg = document.getElementById("curve");
-    svg.textContent = "";
-    const W=900,H=340, L=52,R=64,T=16,B=34;
-    const iw=W-L-R, ih=H-T-B;
-    const ticks=[0.6,0.8,1.0,1.25,1.5,1.75];
-    const lo=Math.log(0.55), hi=Math.log(1.85);
-    const x=i=>L+iw*i/(KO.d.length-1);
+    const svg = document.getElementById("curve"); svg.textContent="";
+    const W=900,H=360,L=54,R=78,T=18,B=36;
+    const iw=W-L-R, ih=H-T-B, n=K27.d.length;
+    const ticks=[0.5,1,2,3,4,6];
+    const lo=Math.log(0.35), hi=Math.log(7.2);
+    const x=i=>L+iw*i/(n-1);
     const y=v=>T+ih*(1-(Math.log(v)-lo)/(hi-lo));
-    const teal=css("--teal"), brick=css("--brick"), grid=css("--grid"),
-          muted=css("--muted"), shade=css("--shade"), panel=css("--panel");
+    const teal=css("--teal"),brick=css("--brick"),grid=css("--grid"),
+          muted=css("--muted"),shade=css("--shade"),panel=css("--panel"),ink2=css("--ink2");
 
-    // risk-off 음영
-    let i=0;
-    while(i<KO.w.length){
-      if(KO.w[i]===0){
-        let j=i; while(j+1<KO.w.length && KO.w[j+1]===0) j++;
-        svg.appendChild(el("rect",{x:x(i),y:T,width:Math.max(x(j)-x(i),3),height:ih,fill:shade}));
-        i=j+1;
-      } else i++;
-    }
-    // 그리드 + y라벨
+    CRISES.forEach(([a,b,name])=>{
+      let i0=K27.d.findIndex(d=>d>=a), i1=K27.d.findIndex(d=>d>=b);
+      if(i0<0) return; if(i1<0) i1=n-1;
+      svg.appendChild(el("rect",{x:x(i0),y:T,width:Math.max(x(i1)-x(i0),4),height:ih,fill:shade}));
+      const t=txt(el("text",{x:x(i0)+3,y:T+ih-6,fill:muted,"font-size":9.5,
+        "font-family":"IBM Plex Sans KR, sans-serif"}),name);
+      svg.appendChild(t);
+    });
     ticks.forEach(t=>{
       svg.appendChild(el("line",{x1:L,x2:L+iw,y1:y(t),y2:y(t),stroke:grid,"stroke-width":1}));
-      const lab=el("text",{x:L-10,y:y(t)+4,fill:muted,"font-size":11,"text-anchor":"end",
-        "font-family":"IBM Plex Mono, monospace"});
-      lab.textContent=t.toFixed(2)+"x"; svg.appendChild(lab);
+      svg.appendChild(txt(el("text",{x:L-9,y:y(t)+4,fill:muted,"font-size":11,"text-anchor":"end",
+        "font-family":"IBM Plex Mono, monospace"}), t+"x"));
     });
-    // x라벨
-    KO.d.forEach((d,k)=>{
-      if(d.endsWith(".01") && (+d.slice(0,2))%2===1){
+    K27.d.forEach((d,k)=>{
+      const yr=+d.slice(0,4);
+      if(d.slice(5)==="03" && yr%4===0){
         svg.appendChild(el("line",{x1:x(k),x2:x(k),y1:T,y2:T+ih,stroke:grid,"stroke-width":1}));
-        const t=el("text",{x:x(k),y:H-12,fill:muted,"font-size":11,"text-anchor":"middle",
-          "font-family":"IBM Plex Mono, monospace"});
-        t.textContent="20"+d.slice(0,2); svg.appendChild(t);
+        svg.appendChild(txt(el("text",{x:x(k),y:H-12,fill:muted,"font-size":11,"text-anchor":"middle",
+          "font-family":"IBM Plex Mono, monospace"}), yr));
       }
     });
     const path = arr => arr.map((v,k)=>(k?"L":"M")+x(k).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
-    svg.appendChild(el("path",{d:path(KO.b),fill:"none",stroke:brick,"stroke-width":2,
-      "stroke-linejoin":"round","stroke-linecap":"round"}));
-    svg.appendChild(el("path",{d:path(KO.s),fill:"none",stroke:teal,"stroke-width":2,
-      "stroke-linejoin":"round","stroke-linecap":"round"}));
-
-    // 끝점 직접 라벨
-    const last=KO.d.length-1;
-    [[KO.b[last],brick,"단순보유"],[KO.s[last],teal,"Flow Radar"]].forEach(([v,c,name])=>{
+    svg.appendChild(el("path",{d:path(K27.b),fill:"none",stroke:brick,"stroke-width":1.8,
+      "stroke-linejoin":"round"}));
+    svg.appendChild(el("path",{d:path(K27.s),fill:"none",stroke:teal,"stroke-width":2,
+      "stroke-linejoin":"round"}));
+    const last=n-1;
+    [[K27.b[last],brick,"단순보유"],[K27.s[last],teal,"Flow Radar"]].forEach(([v,c,name])=>{
       svg.appendChild(el("circle",{cx:x(last),cy:y(v),r:4,fill:c,stroke:panel,"stroke-width":2}));
-      const t=el("text",{x:x(last)+9,y:y(v)+4,fill:c,"font-size":11.5,"font-weight":600,
-        "font-family":"IBM Plex Mono, monospace"});
-      t.textContent=v.toFixed(2)+"x"; svg.appendChild(t);
+      svg.appendChild(txt(el("text",{x:x(last)+9,y:y(v)+4,fill:c,"font-size":11.5,"font-weight":600,
+        "font-family":"IBM Plex Mono, monospace"}), v.toFixed(2)+"x"));
     });
 
-    // hover
     const hov=el("line",{x1:0,x2:0,y1:T,y2:T+ih,stroke:muted,"stroke-width":1,
       "stroke-dasharray":"3 3",opacity:0});
     svg.appendChild(hov);
-    const box=document.getElementById("cbox"), tt=document.getElementById("tt");
+    const tt=document.getElementById("tt");
     const hit=el("rect",{x:L,y:T,width:iw,height:ih,fill:"transparent"});
     svg.appendChild(hit);
     hit.addEventListener("pointermove",ev=>{
       const r=svg.getBoundingClientRect();
-      const px=(ev.clientX-r.left)/r.width*W;
-      let k=Math.round((px-L)/iw*(KO.d.length-1));
-      k=Math.max(0,Math.min(KO.d.length-1,k));
+      let k=Math.round(((ev.clientX-r.left)/r.width*W-L)/iw*(n-1));
+      k=Math.max(0,Math.min(n-1,k));
       hov.setAttribute("x1",x(k)); hov.setAttribute("x2",x(k)); hov.setAttribute("opacity",1);
       tt.style.opacity=1;
       tt.style.left=(x(k)/W*r.width)+"px";
-      tt.style.top =(y(Math.max(KO.s[k],KO.b[k]))/H*r.height)+"px";
-      tt.innerHTML="20"+KO.d[k]+"<br>Flow Radar "+KO.s[k].toFixed(2)+"x<br>단순보유 "+KO.b[k].toFixed(2)
-        +"x<br>비중 "+(KO.w[k]*100).toFixed(0)+"%";
+      tt.style.top=(y(Math.max(K27.s[k],K27.b[k]))/H*r.height)+"px";
+      tt.innerHTML=K27.d[k]+"<br>Flow Radar "+K27.s[k].toFixed(2)+"x<br>단순보유 "
+        +K27.b[k].toFixed(2)+"x<br>비중 "+(K27.w[k]*100).toFixed(0)+"%";
     });
     hit.addEventListener("pointerleave",()=>{hov.setAttribute("opacity",0);tt.style.opacity=0;});
   }
 
-  /* ---------- 2. IC 막대 ---------- */
+  /* ---------- 2. 롤링 1년 초과수익 분포 ---------- */
+  function drawHist(){
+    const svg=document.getElementById("hist"); svg.textContent="";
+    const W=900,H=300,L=52,R=26,T=40,B=44;
+    const iw=W-L-R, ih=H-T-B;
+    const total=HIST.n.reduce((a,b)=>a+b,0);
+    const pct=HIST.n.map(v=>v/total*100);
+    const maxp=Math.max(...pct);
+    const e0=HIST.edges[0], e1=HIST.edges[HIST.edges.length-1];
+    const x=v=>L+iw*(v-e0)/(e1-e0);
+    const y=p=>T+ih*(1-p/(maxp*1.12));
+    const teal=css("--teal"),brick=css("--brick"),grid=css("--grid"),
+          muted=css("--muted"),panel=css("--panel"),ink=css("--ink"),ink2=css("--ink2");
+
+    [0,4,8,12,16].forEach(p=>{
+      if(p>maxp*1.12) return;
+      svg.appendChild(el("line",{x1:L,x2:L+iw,y1:y(p),y2:y(p),stroke:grid,"stroke-width":1}));
+      svg.appendChild(txt(el("text",{x:L-9,y:y(p)+4,fill:muted,"font-size":10.5,"text-anchor":"end",
+        "font-family":"IBM Plex Mono, monospace"}), p+"%"));
+    });
+    pct.forEach((p,i)=>{
+      const a=HIST.edges[i], b=HIST.edges[i+1];
+      if(p<=0) return;
+      svg.appendChild(el("rect",{x:x(a)+1,y:y(p),width:Math.max(x(b)-x(a)-2,1),
+        height:T+ih-y(p),fill:a>=0?teal:brick,rx:2,stroke:panel,"stroke-width":1}));
+    });
+    for(let v=-60;v<=60;v+=20){
+      svg.appendChild(txt(el("text",{x:x(v),y:H-22,fill:muted,"font-size":10.5,"text-anchor":"middle",
+        "font-family":"IBM Plex Mono, monospace"}), (v>0?"+":"")+v+"%p"));
+    }
+    // 0선
+    svg.appendChild(el("line",{x1:x(0),x2:x(0),y1:T-10,y2:T+ih,stroke:ink2,"stroke-width":1.5}));
+    // 중앙값
+    svg.appendChild(el("line",{x1:x(HIST.median),x2:x(HIST.median),y1:T-4,y2:T+ih,
+      stroke:brick,"stroke-width":1.5,"stroke-dasharray":"4 3"}));
+    svg.appendChild(txt(el("text",{x:x(HIST.median)-6,y:T-10,fill:css("--brick-ink"),"font-size":11,
+      "text-anchor":"end","font-weight":600,"font-family":"IBM Plex Mono, monospace"}),
+      "중앙값 "+HIST.median+"%p"));
+    // 전향 OOS
+    svg.appendChild(el("line",{x1:x(HIST.oos),x2:x(HIST.oos),y1:T+ih*0.35,y2:T+ih,
+      stroke:ink,"stroke-width":1.5}));
+    svg.appendChild(txt(el("text",{x:x(HIST.oos)-6,y:T+ih*0.3,fill:ink,"font-size":10.5,
+      "text-anchor":"end","font-family":"IBM Plex Sans KR, sans-serif"}),
+      "전향 OOS "+HIST.oos+"%p"));
+    svg.appendChild(txt(el("text",{x:L+iw,y:T-10,fill:css("--teal-ink"),"font-size":11.5,
+      "text-anchor":"end","font-weight":600,"font-family":"IBM Plex Sans KR, sans-serif"}),
+      "시장을 이긴 해 "+HIST.winrate+"%"));
+    svg.appendChild(txt(el("text",{x:L+iw/2,y:H-6,fill:muted,"font-size":10.5,"text-anchor":"middle",
+      "font-family":"IBM Plex Sans KR, sans-serif"}),
+      "가로축 = 1년 초과수익(%p) · 세로축 = 관측일 비중 (겹치는 창 기준)"));
+  }
+
+  /* ---------- 3. 27.5년 IC (60일 vs 120일) ---------- */
   const IC=[
-    {L:"TREND",ko:0.0776,us:-0.0227},
-    {L:"RISK", ko:-0.0998,us:-0.1049},
-    {L:"FLOW", ko:0.1133, us:0.0163},
-    {L:"COST", ko:0.0431, us:0.0634},
+    {L:"TREND", a:0.033, b:0.020},
+    {L:"RISK",  a:-0.037, b:0.005},
+    {L:"FLOW",  a:0.050, b:0.124},
+    {L:"COST",  a:0.080, b:0.085},
   ];
   function drawIC(){
     const svg=document.getElementById("ic"); svg.textContent="";
-    const W=900,H=300,L=86,R=112,T=34,B=40;
-    const iw=W-L-R, ih=H-T-B;
-    const max=0.13, mid=L+iw/2;
+    const W=900,H=300,L=86,R=118,T=36,B=42;
+    const iw=W-L-R, ih=H-T-B, max=0.14, mid=L+iw/2;
     const x=v=>mid+(v/max)*(iw/2);
     const teal=css("--teal"),brick=css("--brick"),grid=css("--grid"),
           muted=css("--muted"),ink2=css("--ink2"),panel=css("--panel");
     const rowH=ih/IC.length, barH=15, gap=4;
 
-    // 0선 및 눈금
     [-0.10,-0.05,0,0.05,0.10].forEach(v=>{
       svg.appendChild(el("line",{x1:x(v),x2:x(v),y1:T-8,y2:T+ih,
         stroke:v===0?muted:grid,"stroke-width":v===0?1.5:1}));
-      const t=el("text",{x:x(v),y:T-14,fill:muted,"font-size":10.5,"text-anchor":"middle",
-        "font-family":"IBM Plex Mono, monospace"});
-      t.textContent=v>0?"+"+v.toFixed(2):v.toFixed(2); svg.appendChild(t);
+      svg.appendChild(txt(el("text",{x:x(v),y:T-14,fill:muted,"font-size":10.5,"text-anchor":"middle",
+        "font-family":"IBM Plex Mono, monospace"}), (v>0?"+":"")+v.toFixed(2)));
     });
-    // ±0.03 유효 기준선
     [-0.03,0.03].forEach(v=>{
       svg.appendChild(el("line",{x1:x(v),x2:x(v),y1:T,y2:T+ih,stroke:muted,
         "stroke-width":1,"stroke-dasharray":"2 4",opacity:.6}));
     });
-
     IC.forEach((r,k)=>{
       const yc=T+rowH*k+rowH/2;
-      const lab=el("text",{x:L-14,y:yc+4,fill:ink2,"font-size":12,"text-anchor":"end",
-        "font-weight":600,"font-family":"IBM Plex Mono, monospace"});
-      lab.textContent=r.L; svg.appendChild(lab);
-
-      [["ko",-1,"한국"],["us",1,"미국"]].forEach(([key,side,name])=>{
+      svg.appendChild(txt(el("text",{x:L-14,y:yc+4,fill:ink2,"font-size":12,"text-anchor":"end",
+        "font-weight":600,"font-family":"IBM Plex Mono, monospace"}), r.L));
+      [["a",-1,"60일",1],["b",1,"120일",.55]].forEach(([key,side,name,op])=>{
         const v=r[key];
         const yy=yc+side*(barH/2+gap/2)-barH/2;
         const x0=Math.min(x(0),x(v)), w=Math.max(Math.abs(x(v)-x(0)),2);
         svg.appendChild(el("rect",{x:x0,y:yy,width:w,height:barH,rx:3,
-          fill:v>=0?teal:brick, opacity:key==="ko"?1:.55,
-          stroke:panel,"stroke-width":1}));
-        const t=el("text",{x:v>=0?x(v)+7:x(v)-7,y:yy+barH-3.5,
+          fill:v>=0?teal:brick,opacity:op,stroke:panel,"stroke-width":1}));
+        svg.appendChild(txt(el("text",{x:v>=0?x(v)+7:x(v)-7,y:yy+barH-3.5,
           fill:v>=0?css("--teal-ink"):css("--brick-ink"),"font-size":11,
-          "text-anchor":v>=0?"start":"end","font-family":"IBM Plex Mono, monospace",
-          "font-variant-numeric":"tabular-nums"});
-        t.textContent=(v>=0?"+":"")+v.toFixed(3)+"  "+name; svg.appendChild(t);
+          "text-anchor":v>=0?"start":"end","font-family":"IBM Plex Mono, monospace"}),
+          (v>=0?"+":"")+v.toFixed(3)+"  "+name));
       });
     });
-    const note=el("text",{x:mid,y:H-10,fill:muted,"font-size":10.5,"text-anchor":"middle",
-      "font-family":"IBM Plex Mono, monospace"});
-    note.textContent="점선 = ±0.03 (실무 유효 기준)"; svg.appendChild(note);
+    svg.appendChild(txt(el("text",{x:mid,y:H-8,fill:muted,"font-size":10.5,"text-anchor":"middle",
+      "font-family":"IBM Plex Sans KR, sans-serif"}),
+      "점선 = ±0.03 (실무 유효 기준) · 진한 막대 60일, 옅은 막대 120일"));
   }
 
-  function drawAll(){ drawCurve(); drawIC(); }
+  function drawAll(){ drawCurve(); drawHist(); drawIC(); }
   drawAll();
   window.addEventListener("resize",()=>{clearTimeout(window._t);window._t=setTimeout(drawAll,150)});
   if(window.matchMedia) window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",drawAll);
