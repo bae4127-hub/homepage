@@ -41,6 +41,27 @@ TRADING_DAYS = 252
 # ----------------------------------------------------------------------------
 
 
+def _extend_tail(daily: pd.Series, monthly: pd.Series,
+                 index: pd.DatetimeIndex) -> pd.Series:
+    """일간 계열이 끝난 뒤를 월간 계열의 수익률로 이어 붙인다."""
+    d = daily.dropna()
+    if d.empty:
+        return daily
+    end = d.index.max()
+    tail = monthly.loc[monthly.index > end]
+    if tail.empty:
+        return daily
+    anchor = monthly.loc[monthly.index <= end]
+    if anchor.empty:
+        return daily
+    factor = float(d.loc[end]) / float(anchor.iloc[-1])
+    ext = (tail * factor).reindex(index).ffill()
+    out = daily.copy()
+    fill = ext.loc[ext.index > end]
+    out.loc[out.index > end] = out.loc[out.index > end].fillna(fill)
+    return out
+
+
 def load_panel() -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     fetch_data.py 캐시를 일간 패널로 합친다.
@@ -58,9 +79,22 @@ def load_panel() -> tuple[pd.DataFrame, pd.DataFrame]:
                      parse_dates=True, encoding="utf-8-sig")
     vix = pd.read_csv(os.path.join(DATA, "vix_daily.csv"), index_col=0,
                       parse_dates=True, encoding="utf-8-sig")
+    kl = pd.read_csv(os.path.join(DATA, "kospi_long.csv"), index_col=0,
+                     parse_dates=True, encoding="utf-8-sig")[["KOSPI_LONG"]]
+    mm = pd.read_csv(os.path.join(DATA, "macro_monthly.csv"), index_col=0,
+                     parse_dates=True, encoding="utf-8-sig")
 
-    raw = fut.join(fx, how="outer").join(vix, how="outer").sort_index()
-    raw = raw.where(raw > 0)          # 0/음수 호가는 결측 처리 (log 계산 보호)
+    raw = fut.join(fx, how="outer").join(vix, how="outer").join(kl, how="outer").sort_index()
+    # 롤조정 연결선물은 레벨이 음수가 될 수 있고 그 값도 유효하다(차분이 참값).
+    # 그래서 음수를 버리지 않고 '정확히 0'(결측 표기)만 제거한다.
+    # 로그를 취하는 계열은 VIX 뿐이므로 거기에만 양수 조건을 건다.
+    raw = raw.mask(raw == 0)
+    raw["VIX_SPOT"] = raw["VIX_SPOT"].where(raw["VIX_SPOT"] > 0)
+
+    # 금·미국채 선물은 2024-03 에서 끝난다. 그 뒤 구간은 월간 계열의 수익률로 잇는다.
+    # (레벨을 직접 붙이면 현물/선물 수준차가 가짜 점프로 들어간다)
+    for fut_col, m_col in (("GOLD", "GOLD_M"), ("US10", "US10_M")):
+        raw[fut_col] = _extend_tail(raw[fut_col], mm[m_col], raw.index)
     # 미래 값은 절대 끌어오지 않으므로 ffill 만 사용한다.
     panel = raw.ffill()
     return panel, raw
@@ -80,19 +114,35 @@ def norm_mom(s: pd.Series, n: int, vol_win: int = 60) -> pd.Series:
     """
     변동성 정규화 모멘텀 (risk-adjusted momentum).
 
-    n일 로그수익률을 같은 구간의 기대 표준편차(일간변동성 x sqrt(n))로 나눈다.
-    - 자산·기간이 달라도 같은 '시그마' 단위가 되어 그대로 합산할 수 있다.
-    - 60일 변동성만 있으면 계산되므로, 표본이 짧은 시장(KOSPI 선물 2014~)에서도
-      긴 캘리브레이션 기간을 낭비하지 않는다. 이것이 z-score 대비 핵심 장점.
+    n일 '가격 변화량'을 같은 구간의 기대 표준편차(일간 변화량의 표준편차 x sqrt(n))
+    로 나눈다. 결과는 시그마 단위라 자산·기간이 달라도 그대로 합산할 수 있다.
+
+    로그수익률이 아니라 차분을 쓰는 이유
+    ------------------------------------
+    롤조정(back-adjusted) 연결선물은 롤 스프레드가 누적되어 레벨이 0 근처나
+    음수로 내려갈 수 있다. 실제로 미10년 국채선물 연결가격은 1990~94년에
+    0.05까지 떨어져, 로그수익률로 계산하면 하루 10%가 넘는 날이 110일 나왔다.
+    10년 국채가 하루에 10% 움직이는 일은 없다 - 전부 수치 인공물이다.
+    롤조정 시계열은 '레벨'이 아니라 '차분'이 참값이므로 차분을 쓰는 것이 맞다.
+    레벨이 안정적인 계열(지수·환율)에서는 두 방식의 정규화 결과가 사실상 같다.
+
+    60일 변동성만 있으면 계산되므로, 표본이 짧은 시장에서도 긴 캘리브레이션
+    기간을 낭비하지 않는다. 이것이 z-score 대비 핵심 장점.
     """
-    r = np.log(s).diff()
-    scale = r.rolling(vol_win).std() * np.sqrt(n)
-    return ((np.log(s) - np.log(s.shift(n))) / scale.replace(0.0, np.nan)).clip(-3, 3)
+    d = s.diff()
+    scale = d.rolling(vol_win).std() * np.sqrt(n)
+    return ((s - s.shift(n)) / scale.replace(0.0, np.nan)).clip(-3, 3)
 
 
-def ratio_mom(a: pd.Series, b: pd.Series, n: int) -> pd.Series:
-    """a/b 상대강도의 변동성 정규화 모멘텀. 양수면 a(위험자산) 우위."""
-    return norm_mom(a / b, n)
+def rel_mom(a: pd.Series, b: pd.Series, n: int) -> pd.Series:
+    """
+    상대강도. 두 자산의 '시그마 단위 모멘텀 차'로 정의한다.
+
+    a/b 비율을 쓰지 않는 이유: 롤조정 연결선물의 b 가 0 근처로 가면 비율이
+    폭발한다. 각자 정규화한 뒤 빼면 그 문제가 사라지고, 단위도 그대로 시그마다.
+    양수면 a(위험자산) 우위.
+    """
+    return (norm_mom(a, n) - norm_mom(b, n)).clip(-3, 3)
 
 
 def expanding_z(s: pd.Series, min_periods: int = 252, clip: float = 3.0) -> pd.Series:
@@ -136,11 +186,11 @@ def build_signals(panel: pd.DataFrame, cfg: MarketConfig) -> pd.DataFrame:
     #  VIX 는 '레벨' 자체에 정보가 있으므로 확장 z 사용 (1990년부터 데이터 존재)
     sig["RISK.vix_level"] = expanding_z(-np.log(vix))
     sig["RISK.vix_change"] = -norm_mom(vix, 20)
-    sig["RISK.eq_vs_bond"] = ratio_mom(eq, bd, 60)
+    sig["RISK.eq_vs_bond"] = rel_mom(eq, bd, 60)
 
     # ---- L3 FLOW : 국경을 넘는 돈의 방향 -----------------------------------
     sig["FLOW.usd_weak"] = -norm_mom(dxy, 60)        # 달러 약세 = 위험자산·신흥국 유입
-    sig["FLOW.eq_vs_gold"] = ratio_mom(eq, gold, 60)  # 주식 > 금 = 위험선호
+    sig["FLOW.eq_vs_gold"] = rel_mom(eq, gold, 60)   # 주식 > 금 = 위험선호
     if cfg.fx_local:
         # 원화 강세 = 외국인 자금 유입의 가장 빠른 흔적
         sig["FLOW.krw_strong"] = -norm_mom(p[cfg.fx_local], 60)
@@ -156,8 +206,36 @@ def build_signals(panel: pd.DataFrame, cfg: MarketConfig) -> pd.DataFrame:
 LAYERS = ["TREND", "RISK", "FLOW", "COST"]
 
 
-def score_frame(raw: pd.DataFrame, cfg: MarketConfig) -> pd.DataFrame:
-    """지표 → 층 점수 → Flow Score (모두 시그마 단위)."""
+def trailing_ic(layer: pd.Series, price: pd.Series, horizon: int = 20,
+                min_periods: int = 756) -> pd.Series:
+    """
+    t시점까지 실현된 정보만으로 계산한 층별 정보계수.
+
+    x = horizon+1일 전의 층 점수      (그 시점에 이미 알고 있던 값)
+    y = 그 이후 horizon일간 실현수익   (t시점에 이미 관측된 값)
+    두 계열의 확장 윈도 상관 → t시점에 "이 층이 지금까지 맞았나"를 답한다.
+    미래 정보가 들어갈 여지가 없다.
+    """
+    x = layer.shift(horizon + 1)
+    y = price.pct_change(horizon)
+    return x.expanding(min_periods=min_periods).corr(y)
+
+
+def score_frame(raw: pd.DataFrame, cfg: MarketConfig,
+                price: pd.Series | None = None,
+                dynamic: bool = False, ic_band: float = 0.02,
+                ic_horizon: int = 20) -> pd.DataFrame:
+    """
+    지표 → 층 점수 → Flow Score (모두 시그마 단위).
+
+    dynamic=True 면 각 층의 부호를 '지금까지의 실적(trailing IC)'이 정한다.
+      IC > +band  → 그대로       (+1)
+      IC < -band  → 부호 뒤집기  (-1)
+      그 사이     → 이 층은 쉰다  ( 0)
+    검증 결과 RISK 층의 IC가 두 시장 모두 음(-0.10)이었는데, 그 사실을
+    사람이 보고 손으로 뒤집으면 데이터 스누핑이다. 규칙이 스스로,
+    과거 데이터만 보고 뒤집게 만든 것이 이 옵션이다.
+    """
     layers = {}
     for layer in LAYERS:
         cols = [c for c in raw.columns if c.startswith(layer + ".")]
@@ -165,8 +243,26 @@ def score_frame(raw: pd.DataFrame, cfg: MarketConfig) -> pd.DataFrame:
     L = pd.DataFrame(layers)
 
     w = cfg.layer_weights
-    total_w = sum(w[k] for k in LAYERS)
-    L["FLOW_SCORE"] = sum(L[k] * w[k] for k in LAYERS) / total_w
+    if not dynamic:
+        total_w = sum(w[k] for k in LAYERS)
+        L["FLOW_SCORE"] = sum(L[k] * w[k] for k in LAYERS) / total_w
+        return pd.concat([raw, L], axis=1)
+
+    if price is None:
+        raise ValueError("dynamic=True 에는 price 가 필요하다")
+
+    num = pd.Series(0.0, index=L.index)
+    den = pd.Series(0.0, index=L.index)
+    for layer in LAYERS:
+        ic = trailing_ic(L[layer], price, horizon=ic_horizon)
+        sgn = pd.Series(0.0, index=L.index)
+        sgn[ic > ic_band] = 1.0
+        sgn[ic < -ic_band] = -1.0
+        sgn[ic.isna()] = 1.0          # IC 표본이 모이기 전에는 사전 가중치 그대로
+        L[f"SGN.{layer}"] = sgn
+        num += L[layer] * w[layer] * sgn
+        den += w[layer] * sgn.abs()
+    L["FLOW_SCORE"] = num / den.replace(0.0, np.nan)
 
     return pd.concat([raw, L], axis=1)
 
@@ -299,6 +395,22 @@ def perf_stats(ret: pd.Series, turnover: pd.Series | None = None) -> Dict[str, f
 KOSPI_CFG = MarketConfig(
     name="한국 (KOSPI200 선물)",
     equity="KOSPI", bond="KR10", fx_local="USDKRW",
+    start="2014-03-13", end="2024-03-29",
+)
+
+# 장기 검증용. KOSPI200 선물이 2014년부터라 현물지수로 앞뒤를 이어 27년으로 늘렸다.
+# 한국 국채선물(KR10)도 2014년부터뿐이라, 이 설정에서는 자금비용 층에
+# 미국채(US10)를 쓴다 - 한국은 글로벌 금리가 자금비용을 정하는 시장이라는 관점.
+KOSPI_LONG_CFG = MarketConfig(
+    name="한국 장기 (KOSPI 현물⊕선물)",
+    equity="KOSPI_LONG", bond="US10", fx_local="USDKRW",
+    start="1997-07-01", end="2025-03-20",
+)
+
+# 위 설정의 국채 대체가 결과를 바꾸는지 확인하는 대조군 (2014~2024 구간 한정)
+KOSPI_US10_CFG = MarketConfig(
+    name="한국 2014-24 (국채만 US10로 교체)",
+    equity="KOSPI", bond="US10", fx_local="USDKRW",
     start="2014-03-13", end="2024-03-29",
 )
 
