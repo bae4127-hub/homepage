@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $OutPosts = "..\data\posts.json"
@@ -60,7 +60,7 @@ foreach ($m in $matches_list) {
         image = $null
     }
     $items += $postObj
-    if ($items.Count -ge 12) { break }
+    if ($items.Count -ge 30) { break }
 }
 
 Write-Host "Fetching Thumbnails..."
