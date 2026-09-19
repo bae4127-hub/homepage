@@ -15,8 +15,20 @@ const FALLBACK_POSTS = [
 
 function renderPosts(posts) {
   const wrap = document.getElementById("blog-posts");
+  
+  // '주보' 또는 '공지'가 포함된 글만 필터링하여 교회소식에 노출
+  const newsPosts = posts.filter(p => 
+    p.title.includes("주보") || p.title.includes("공지") || 
+    (p.category && (p.category.includes("주보") || p.category.includes("공지")))
+  );
+
+  if (newsPosts.length === 0) {
+    wrap.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 2rem;">최근 등록된 주보나 공지가 없습니다.</p>`;
+    return;
+  }
+
   // 이미지가 안 불러와지면 onerror로 제거 → 뒤에 깔린 대체 배경(⛪ 그라데이션)이 보임
-  wrap.innerHTML = posts.slice(0, MAX_POSTS).map(p => `
+  wrap.innerHTML = newsPosts.slice(0, MAX_POSTS).map(p => `
     <a class="post-card" href="${p.link}" target="_blank" rel="noopener" data-category="${p.category || '소식'}">
       <div class="post-thumb">
         ${p.image ? `<img src="${p.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}

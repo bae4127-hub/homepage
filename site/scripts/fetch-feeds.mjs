@@ -8,7 +8,7 @@ const RSS_URL = "https://rss.blog.naver.com/wormwood79.xml";
 const YT_RSS_URL = "https://www.youtube.com/feeds/videos.xml?channel_id=UC7OCid3xzRUptzmHUvA7B4g";
 const OUT_FILE = "data/posts.json";
 const VIDEO_FILE = "data/latest-video.json";
-const MAX_POSTS = 12;
+const MAX_POSTS = 30;
 
 // 메인에 노출하지 않을 카테고리 (블로그 개편 후 필요시 수정)
 const HIDE_CATEGORIES = ["낙서장", "일상기록", "책읽기"];
