@@ -1,6 +1,18 @@
 [
   {
     "active": true,
+    "isModal": true,
+    "badge": "교회 소풍",
+    "title": "청라강성교회 소풍 🌿",
+    "description": "일시: 9.20(주일) 9시 반 예배 후 11시 / 장소: 청라해변공원 캠핑장",
+    "link": "",
+    "linkText": "확인",
+    "image": "images/picnic.png",
+    "start": "2026-09-19",
+    "end": "2026-09-20"
+  },
+  {
+    "active": true,
     "badge": "교회 이야기",
     "title": "회복의 통로 — 청라강성교회 개척이야기",
     "description": "그 어렵다는 코로나19 때 세워진 교회. 월간목회(2025년 1월호)에 실린 우리 교회의 이야기입니다.",
