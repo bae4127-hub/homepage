@@ -92,6 +92,12 @@
     .step-note { color: var(--muted); font-size: 15px; }
     .scripture-link { display: inline-flex; align-items: center; min-height: 44px; margin: 15px 0 6px; padding: 8px 17px; border-radius: 999px; background: #e7f0e4; color: #174936; font-size: 15px; font-weight: 800; text-decoration: none; }
     .scripture-link:hover { background: #d8e8d3; }
+    .scripture-box { max-width: 880px; padding: 34px 38px; border: 1px solid #dfe7d9; border-radius: 24px; background: #fff; box-shadow: 0 10px 28px rgba(56, 60, 31, .035); }
+    .scripture-line { display: grid; grid-template-columns: 35px minmax(0, 1fr); gap: 12px; margin: 0 0 17px; color: var(--ink); font-size: 18px; line-height: 1.85; word-break: keep-all; overflow-wrap: anywhere; }
+    .scripture-line:last-of-type { margin-bottom: 0; }
+    .scripture-number { padding-top: 2px; color: #a55d24; font-size: 14px; font-weight: 800; }
+    .scripture-source { margin: 25px 0 0; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+    .scripture-source a { color: #215a43; font-weight: 750; }
     .story { margin-top: 17px; padding: 20px 24px; border-left: 4px solid #e79738; border-radius: 0 14px 14px 0; background: #fff6e9; }
     .story strong { display: block; margin-bottom: 7px; color: var(--orange); }
     .story p { margin: 0; }
@@ -153,6 +159,8 @@
       .step h3 { font-size: 19px; }
       .step .prompt { font-size: 17px; }
       .story { padding: 16px; }
+      .scripture-box { padding: 22px 18px; }
+      .scripture-line { grid-template-columns: 27px minmax(0, 1fr); gap: 8px; font-size: 16px; line-height: 1.75; }
       .question-grid { grid-template-columns: 1fr; gap: 12px; }
       .question-card { padding: 22px; }
       .question-card label { min-height: 0; font-size: 19px; }
@@ -231,7 +239,7 @@
     <div class="overview" aria-label="이번 주 가정예배 안내">
       <div class="overview-item"><small>함께 부를 찬송</small><strong>죄에서 자유를 얻게 함은</strong><span>찬송가 268장</span></div>
       <div class="overview-item"><small>오늘의 요절</small><strong>마가복음 2장 17절</strong><span>새번역</span></div>
-      <div class="overview-item"><small>함께 읽을 말씀</small><strong>사도행전 8장 26–40절</strong><span>필립과 에티오피아 사람</span><a class="overview-read" href="https://www.bskorea.or.kr/bible/korbibReadpage.php?book=act&amp;chap=8&amp;sec=26&amp;version=SAENEW" target="_blank" rel="noopener noreferrer">새번역 본문 읽기 ↗</a></div>
+      <div class="overview-item"><small>함께 읽을 말씀</small><strong>사도행전 8장 26–40절</strong><span>빌립과 에티오피아 사람</span><a class="overview-read" href="#bible-text">새번역 본문 읽기 ↓</a></div>
     </div>
 
     <aside class="verse" aria-label="오늘의 요절">
@@ -239,6 +247,32 @@
       <blockquote>예수께서 그 말을 들으시고 그들에게 말씀하셨다. “건강한 사람에게는 의사가 필요하지 않으나, 병든 사람에게는 필요하다. 나는 의인을 부르러 온 것이 아니라 죄인을 부르러 왔다.”</blockquote>
       <cite>마가복음 2장 17절 · 새번역 (오렌지카드에 실린 요절)</cite>
     </aside>
+
+    <section class="content-section" id="bible-text" aria-labelledby="bible-text-title">
+      <div class="section-top">
+        <p class="eyebrow">함께 읽는 성경본문</p>
+        <h2 id="bible-text-title">사도행전 8장 26–40절</h2>
+        <p>새번역 · 가족이 한 절씩 돌아가며 읽어 보세요.</p>
+      </div>
+      <div class="scripture-box">
+        <p class="scripture-line"><span class="scripture-number">26</span><span>그런데 주님의 천사가 빌립에게 말하였다. “일어나서 남쪽으로 나아가서, 예루살렘에서 가사로 내려가는 길로 가거라. 그 길은 광야 길이다.”</span></p>
+        <p class="scripture-line"><span class="scripture-number">27</span><span>빌립은 일어나서 가다가, 마침 에티오피아 사람 하나를 만났다. 그는 에티오피아 여왕 간다게의 고관으로, 그 여왕의 모든 재정을 관리하는 내시였다. 그는 예배하러 예루살렘에 왔다가,</span></p>
+        <p class="scripture-line"><span class="scripture-number">28</span><span>돌아가는 길에 마차에 앉아서 예언자 이사야의 글을 읽고 있었다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">29</span><span>성령이 빌립에게 말씀하셨다. “가서, 마차에 바짝 다가서거라.”</span></p>
+        <p class="scripture-line"><span class="scripture-number">30</span><span>빌립이 달려가서, 그 사람이 예언자 이사야의 글을 읽는 것을 듣고 “지금 읽으시는 것을 이해하십니까?” 하고 물었다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">31</span><span>그가 대답하기를 “나를 지도하여 주는 사람이 없으니, 내가 어떻게 깨달을 수 있겠습니까?” 하고, 올라와서 자기 곁에 앉기를 빌립에게 청하였다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">32</span><span>그가 읽던 성경 구절은 이것이었다. “양이 도살장으로 끌려가는 것과 같이, 새끼 양이 털 깎는 사람 앞에서 잠잠한 것과 같이, 그는 입을 열지 않았다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">33</span><span>그는 굴욕을 당하면서, 공평한 재판을 박탈당하였다. 그의 생명이 땅에서 빼앗겼으니, 누가 그의 세대를 이야기하랴?”</span></p>
+        <p class="scripture-line"><span class="scripture-number">34</span><span>내시가 빌립에게 말하였다. “예언자가 여기서 말한 것은 누구를 두고 한 말입니까? 자기를 두고 한 말입니까, 아니면 다른 사람을 두고 한 말입니까?”</span></p>
+        <p class="scripture-line"><span class="scripture-number">35</span><span>빌립은 입을 열어서, 이 성경 말씀에서부터 시작하여, 예수에 관한 기쁜 소식을 전하였다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">36</span><span>그들이 길을 가다가, 물이 있는 곳에 이르니, 내시가 말하였다. “보십시오. 여기에 물이 있습니다. 내가 세례를 받는 데에, 무슨 거리낌이 되는 것이라도 있습니까?”</span></p>
+        <p class="scripture-line"><span class="scripture-number">37</span><span>(없음)</span></p>
+        <p class="scripture-line"><span class="scripture-number">38</span><span>빌립은 마차를 세우게 하고, 내시와 함께 물로 내려가서, 그에게 세례를 주었다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">39</span><span>그들이 물에서 올라오니, 주님의 영이 빌립을 데리고 갔다. 그래서 내시는 그를 더 이상 볼 수 없었지만, 기쁨에 차서 가던 길을 갔다.</span></p>
+        <p class="scripture-line"><span class="scripture-number">40</span><span>그 뒤에 빌립은 아소도에 나타났다. 그는 돌아다니면서 여러 성에 복음을 전하다가, 마침내 가이사랴에 이르렀다.</span></p>
+        <p class="scripture-source">사도행전 8:26–40 · 새번역 · 대한성서공회<br><a href="https://www.bskorea.or.kr/bible/korbibReadpage.php?book=act&amp;chap=8&amp;sec=26&amp;version=SAENEW" target="_blank" rel="noopener noreferrer">대한성서공회에서 본문 보기 ↗</a></p>
+      </div>
+    </section>
 
     <section class="content-section" id="worship" aria-labelledby="worship-title">
       <div class="section-top">
@@ -260,9 +294,8 @@
           <div>
             <h3>말씀을 읽고 복음을 들려줘요</h3>
             <p><strong>사도행전 8장 26–40절</strong>을 함께 읽은 뒤, 부모가 마음에 남은 말씀도 나눠 보세요.</p>
-            <a class="scripture-link" href="https://www.bskorea.or.kr/bible/korbibReadpage.php?book=act&amp;chap=8&amp;sec=26&amp;version=SAENEW" target="_blank" rel="noopener noreferrer">새번역 성경본문 열기 ↗</a>
-            <p class="step-note">대한성서공회 페이지에서 26절부터 40절까지 읽어 주세요.</p>
-            <div class="story"><strong>아이에게 들려줄 이야기</strong><p>에티오피아 사람은 필립에게 예수님의 복음을 듣고 세례를 받았어요. 예수님은 십자가에서 우리 죄를 대신 지시고 하나님께 나아가는 길을 열어 주셨어요. 우리도 잘해서가 아니라 예수님의 사랑으로 하나님께 나아갈 수 있어요.</p></div>
+            <a class="scripture-link" href="#bible-text">이 화면에서 성경본문 읽기 ↑</a>
+            <div class="story"><strong>아이에게 들려줄 이야기</strong><p>에티오피아 사람은 빌립에게 예수님의 복음을 듣고 세례를 받았어요. 예수님은 십자가에서 우리 죄를 대신 지시고 하나님께 나아가는 길을 열어 주셨어요. 우리도 잘해서가 아니라 예수님의 사랑으로 하나님께 나아갈 수 있어요.</p></div>
           </div>
         </article>
         <article class="step">
