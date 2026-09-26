@@ -57,17 +57,33 @@ async function loadPosts() {
     posts = FALLBACK_POSTS; // 로컬 미리보기 등 fetch 불가 환경
   }
   renderPosts(posts);
-  renderFamilyWorship(posts);
+  let dashboards = [];
+  try {
+    const res = await fetch("data/orange-dashboards.json", { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) dashboards = data;
+    }
+  } catch (e) { /* 대시보드 목록이 없으면 기존 블로그 카드 유지 */ }
+  renderFamilyWorship(posts, dashboards);
 }
 
 // ===== 가정예배 · 밤기도회 코너 =====
 // 블로그 글 제목에 "오렌지카드" / "선포기도"가 들어 있으면 최신 글이 자동으로 여기 표시됨.
 // (블로그 템플릿 09·10번의 제목 규칙을 지키면 됨 — 별도 관리 불필요)
-function renderFamilyWorship(posts) {
+function renderFamilyWorship(posts, dashboards = []) {
   // 해당 글이 최근 목록에 없을 때는 방문자용 안내 문구 + 블로그 지난 글 링크를 보여줌
   const BLOG_URL = "https://blog.naver.com/wormwood79";
   const today = todayKST();
-  const showOrangeDashboard = today >= "2026-09-26" && today <= "2026-10-03";
+  const dashboard = dashboards
+    .filter(d => d && /^\d{4}-\d{2}-\d{2}$/.test(d.date) &&
+      /^orange-card-\d{6}\.html$/.test(d.url) &&
+      typeof d.title === "string" && typeof d.summary === "string" &&
+      d.start <= today && today <= d.end)
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[char]);
   const showPrayerDashboard = today >= "2026-09-26" && today <= "2026-10-03";
   const corners = [
     { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지" },
@@ -79,13 +95,13 @@ function renderFamilyWorship(posts) {
   corners.forEach(c => {
     const el = document.getElementById(c.id);
     const post = posts.find(p => p.title.includes(c.match) || (p.category && p.category.includes(c.match)));
-    if (c.id === "fw-orange" && showOrangeDashboard) {
+    if (c.id === "fw-orange" && dashboard) {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>
-        <span class="fw-label">가정예배 순서지 · 2026. 9. 27.</span>
-        <h3><a href="orange-card-260927.html">9월 27일 오렌지 가정예배</a></h3>
-        <p class="fw-empty">찬송, 말씀, 가족 대화와 기도를 한 화면에서 함께 나눠 보세요.</p>
-        <a class="fw-cta" href="orange-card-260927.html">가족 대시보드 열기 →</a>`;
+        <span class="fw-label">가정예배 순서지 · ${escapeHtml(dashboard.date)}</span>
+        <h3><a href="${dashboard.url}">${escapeHtml(dashboard.title)}</a></h3>
+        <p class="fw-empty">${escapeHtml(dashboard.summary)}</p>
+        <a class="fw-cta" href="${dashboard.url}">가족 대시보드 열기 →</a>`;
       return;
     }
     if (c.id === "fw-prayer" && showPrayerDashboard) {

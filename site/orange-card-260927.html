@@ -74,6 +74,7 @@
     .overview-item small { display: block; margin-bottom: 8px; color: var(--orange); font-size: 13px; font-weight: 800; }
     .overview-item strong { display: block; color: var(--ink); font-size: 18px; line-height: 1.4; }
     .overview-item span { display: block; margin-top: 3px; color: var(--muted); font-size: 14px; }
+    .overview-read { display: inline-block; margin-top: 7px; color: #215a43; font-size: 14px; font-weight: 800; text-underline-offset: 3px; }
     .verse { margin-top: 22px; padding: 36px 48px; border-radius: 24px; background: #eaf2e8; }
     .verse-label { margin-bottom: 11px; color: #476950; font-size: 14px; font-weight: 800; }
     .verse blockquote { margin-bottom: 9px; color: var(--ink); font-size: clamp(21px, 2.35vw, 27px); font-weight: 690; line-height: 1.62; letter-spacing: -.025em; }
@@ -89,6 +90,8 @@
     .step p { margin-bottom: 0; }
     .step .prompt { display: inline-block; margin: 6px 0; color: var(--ink); font-size: 18px; font-weight: 760; }
     .step-note { color: var(--muted); font-size: 15px; }
+    .scripture-link { display: inline-flex; align-items: center; min-height: 44px; margin: 15px 0 6px; padding: 8px 17px; border-radius: 999px; background: #e7f0e4; color: #174936; font-size: 15px; font-weight: 800; text-decoration: none; }
+    .scripture-link:hover { background: #d8e8d3; }
     .story { margin-top: 17px; padding: 20px 24px; border-left: 4px solid #e79738; border-radius: 0 14px 14px 0; background: #fff6e9; }
     .story strong { display: block; margin-bottom: 7px; color: var(--orange); }
     .story p { margin: 0; }
@@ -228,7 +231,7 @@
     <div class="overview" aria-label="이번 주 가정예배 안내">
       <div class="overview-item"><small>함께 부를 찬송</small><strong>죄에서 자유를 얻게 함은</strong><span>찬송가 268장</span></div>
       <div class="overview-item"><small>오늘의 요절</small><strong>마가복음 2장 17절</strong><span>새번역</span></div>
-      <div class="overview-item"><small>함께 읽을 말씀</small><strong>사도행전 8장 26–40절</strong><span>필립과 에티오피아 사람</span></div>
+      <div class="overview-item"><small>함께 읽을 말씀</small><strong>사도행전 8장 26–40절</strong><span>필립과 에티오피아 사람</span><a class="overview-read" href="https://www.bskorea.or.kr/bible/korbibReadpage.php?book=act&amp;chap=8&amp;sec=26&amp;version=SAENEW" target="_blank" rel="noopener noreferrer">새번역 본문 읽기 ↗</a></div>
     </div>
 
     <aside class="verse" aria-label="오늘의 요절">
@@ -257,6 +260,8 @@
           <div>
             <h3>말씀을 읽고 복음을 들려줘요</h3>
             <p><strong>사도행전 8장 26–40절</strong>을 함께 읽은 뒤, 부모가 마음에 남은 말씀도 나눠 보세요.</p>
+            <a class="scripture-link" href="https://www.bskorea.or.kr/bible/korbibReadpage.php?book=act&amp;chap=8&amp;sec=26&amp;version=SAENEW" target="_blank" rel="noopener noreferrer">새번역 성경본문 열기 ↗</a>
+            <p class="step-note">대한성서공회 페이지에서 26절부터 40절까지 읽어 주세요.</p>
             <div class="story"><strong>아이에게 들려줄 이야기</strong><p>에티오피아 사람은 필립에게 예수님의 복음을 듣고 세례를 받았어요. 예수님은 십자가에서 우리 죄를 대신 지시고 하나님께 나아가는 길을 열어 주셨어요. 우리도 잘해서가 아니라 예수님의 사랑으로 하나님께 나아갈 수 있어요.</p></div>
           </div>
         </article>
