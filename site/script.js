@@ -5,6 +5,10 @@
 const POSTS_URL = "data/posts.json";
 const MAX_POSTS = 6;
 
+function todayKST() {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
 // file:// 로 직접 열었을 때(보안 정책으로 fetch 차단) 대신 표시할 예비 목록 (실제 글)
 const FALLBACK_POSTS = [
   { title: "[말씀쇼츠] 진짜를 만나면, 가짜에 목마르지 않습니다", link: "https://blog.naver.com/wormwood79/224212885019", date: "2026-03-12", category: "말씀쇼츠", image: "https://i.ytimg.com/vi/KHaOw9tYbvQ/hqdefault.jpg" },
@@ -62,6 +66,8 @@ async function loadPosts() {
 function renderFamilyWorship(posts) {
   // 해당 글이 최근 목록에 없을 때는 방문자용 안내 문구 + 블로그 지난 글 링크를 보여줌
   const BLOG_URL = "https://blog.naver.com/wormwood79";
+  const today = todayKST();
+  const showOrangeDashboard = today >= "2026-09-26" && today <= "2026-10-03";
   const corners = [
     { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지" },
     { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회" },
@@ -72,6 +78,15 @@ function renderFamilyWorship(posts) {
   corners.forEach(c => {
     const el = document.getElementById(c.id);
     const post = posts.find(p => p.title.includes(c.match) || (p.category && p.category.includes(c.match)));
+    if (c.id === "fw-orange" && showOrangeDashboard) {
+      el.innerHTML = `
+        <span class="fw-badge">${c.badge}</span>
+        <span class="fw-label">가정예배 순서지 · 2026. 9. 27.</span>
+        <h3><a href="orange-card-260927.html">9월 27일 오렌지 가정예배</a></h3>
+        <p class="fw-empty">찬송, 말씀, 가족 대화와 기도를 한 화면에서 함께 나눠 보세요.</p>
+        <a class="fw-cta" href="orange-card-260927.html">가족 대시보드 열기 →</a>`;
+      return;
+    }
     if (post) {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>
@@ -159,9 +174,8 @@ async function loadNotice() {
     const data = await res.json();
     const list = Array.isArray(data) ? data : [data];
 
-    // 한국 시간 기준의 오늘 날짜 (toISOString은 세계표준시라 오전 9시 전까지 전날로 계산되는 문제가 있음)
-    const now = new Date();
-    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    // 방문자의 시간대와 무관하게 한국 날짜로 표시 기간을 판정합니다.
+    const today = todayKST();
     const visible = list.filter(n =>
       n.active &&
       (!n.start || today >= n.start) &&
