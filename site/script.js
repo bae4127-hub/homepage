@@ -68,6 +68,7 @@ function renderFamilyWorship(posts) {
   const BLOG_URL = "https://blog.naver.com/wormwood79";
   const today = todayKST();
   const showOrangeDashboard = today >= "2026-09-26" && today <= "2026-10-03";
+  const showPrayerDashboard = today >= "2026-09-26" && today <= "2026-10-03";
   const corners = [
     { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지" },
     { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회" },
@@ -85,6 +86,14 @@ function renderFamilyWorship(posts) {
         <h3><a href="orange-card-260927.html">9월 27일 오렌지 가정예배</a></h3>
         <p class="fw-empty">찬송, 말씀, 가족 대화와 기도를 한 화면에서 함께 나눠 보세요.</p>
         <a class="fw-cta" href="orange-card-260927.html">가족 대시보드 열기 →</a>`;
+      return;
+    }
+    if (c.id === "fw-prayer" && showPrayerDashboard) {
+      el.innerHTML = `
+        <span class="fw-badge">${c.badge}</span>
+        <span class="fw-label">26년 9월27일 주간</span>
+        <h3><a href="prayer-260927.html">선포기도문 / 26년 9월27일 주간</a></h3>
+        <a class="fw-cta" href="prayer-260927.html">선포기도문 대시보드 열기 →</a>`;
       return;
     }
     if (post) {
