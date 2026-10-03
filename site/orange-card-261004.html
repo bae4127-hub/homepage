@@ -92,6 +92,10 @@
     .step-note { color: var(--muted); font-size: 15px; }
     .scripture-link { display: inline-flex; align-items: center; min-height: 44px; margin: 15px 0 6px; padding: 8px 17px; border-radius: 999px; background: #e7f0e4; color: #174936; font-size: 15px; font-weight: 800; text-decoration: none; }
     .scripture-link:hover { background: #d8e8d3; }
+    .praise-video { display: block; max-width: 440px; margin-top: 18px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #fff; color: var(--ink); text-decoration: none; }
+    .praise-video img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .praise-video span { display: block; padding: 12px 16px; font-size: 16px; font-weight: 750; }
+    .praise-video:hover { background: var(--orange-soft); }
     .scripture-box { max-width: 880px; padding: 34px 38px; border: 1px solid #dfe7d9; border-radius: 24px; background: #fff; box-shadow: 0 10px 28px rgba(56, 60, 31, .035); }
     .scripture-line { display: grid; grid-template-columns: 35px minmax(0, 1fr); gap: 12px; margin: 0 0 17px; color: var(--ink); font-size: 18px; line-height: 1.85; word-break: keep-all; overflow-wrap: anywhere; }
     .scripture-line:last-of-type { margin-bottom: 0; }
@@ -231,7 +235,7 @@
     </div>
 
     <div class="overview" aria-label="이번 주 가정예배 안내">
-      <div class="overview-item"><small>함께 부를 찬송</small><strong>나의 눈 열어</strong><span>가족이 아는 부분부터 함께 불러요</span></div>
+      <div class="overview-item"><small>함께 부를 찬송</small><strong>나의 눈 열어</strong><span>가족이 아는 부분부터 함께 불러요</span><a class="overview-read" href="https://www.youtube.com/watch?v=2yQKZnSBQBA" target="_blank" rel="noopener noreferrer">찬양영상으로 함께 부르기 ↗</a></div>
       <div class="overview-item"><small>오늘의 요절</small><strong>시편 119편 18절</strong><span>새번역</span></div>
       <div class="overview-item"><small>함께 읽을 말씀</small><strong>사도행전 9장 1–11절, 17–19절</strong><span>사울과 아나니아</span><a class="overview-read" href="#bible-text">성경본문 읽기 ↓</a></div>
     </div>
@@ -277,7 +281,7 @@
       <div class="worship-list">
         <article class="step">
           <span class="step-number" aria-hidden="true">1</span>
-          <div><h3>찬송으로 시작해요</h3><p>가족이 함께 <strong>「나의 눈 열어」</strong>를 부르며 주님께 우리의 눈과 마음을 열어 달라고 기도해요.</p></div>
+          <div><h3>찬송으로 시작해요</h3><p>가족이 함께 <strong>「나의 눈 열어」</strong>를 부르며 주님께 우리의 눈과 마음을 열어 달라고 기도해요.</p><a class="praise-video" href="https://www.youtube.com/watch?v=2yQKZnSBQBA" target="_blank" rel="noopener noreferrer" aria-label="나의 눈 열어 · 예수전도단 서울화요모임 찬양영상 유튜브에서 열기"><img src="https://i.ytimg.com/vi/2yQKZnSBQBA/hqdefault.jpg" alt="나의 눈 열어 찬양영상" loading="lazy"><span>▶ 나의 눈 열어 · 함께 부르기 ↗<br><small>예수전도단 서울화요모임 · 유튜브에서 재생</small></span></a></div>
         </article>
         <article class="step">
           <span class="step-number" aria-hidden="true">2</span>
