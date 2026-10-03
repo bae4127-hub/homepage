@@ -109,7 +109,7 @@ function renderFamilyWorship(posts, dashboards = []) {
         <span class="fw-badge">${c.badge}</span>
         <span class="fw-label">26년 10월4일 주간</span>
         <h3><a href="prayer-261004.html">선포기도문 / 26년 10월4일 주간</a></h3>
-        <a class="fw-cta" href="prayer-261004.html">선포기도문 대시보드 열기 →</a>`;
+        <a class="fw-cta" href="prayer-261004.html">선포기도문 열기 →</a>`;
       return;
     }
     if (post) {
