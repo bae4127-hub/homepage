@@ -84,7 +84,7 @@ function renderFamilyWorship(posts, dashboards = []) {
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
-  const showPrayerDashboard = today >= "2026-09-26" && today <= "2026-10-03";
+  const showPrayerDashboard = today >= "2026-10-03" && today <= "2026-10-10";
   const corners = [
     { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지" },
     { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회" },
@@ -107,9 +107,9 @@ function renderFamilyWorship(posts, dashboards = []) {
     if (c.id === "fw-prayer" && showPrayerDashboard) {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>
-        <span class="fw-label">26년 9월27일 주간</span>
-        <h3><a href="prayer-260927.html">선포기도문 / 26년 9월27일 주간</a></h3>
-        <a class="fw-cta" href="prayer-260927.html">선포기도문 대시보드 열기 →</a>`;
+        <span class="fw-label">26년 10월4일 주간</span>
+        <h3><a href="prayer-261004.html">선포기도문 / 26년 10월4일 주간</a></h3>
+        <a class="fw-cta" href="prayer-261004.html">선포기도문 대시보드 열기 →</a>`;
       return;
     }
     if (post) {
