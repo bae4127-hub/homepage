@@ -101,7 +101,7 @@ function renderFamilyWorship(posts, dashboards = []) {
         <span class="fw-label">가정예배 순서지 · ${escapeHtml(dashboard.date)}</span>
         <h3><a href="${dashboard.url}">${escapeHtml(dashboard.title)}</a></h3>
         <p class="fw-empty">${escapeHtml(dashboard.summary)}</p>
-        <a class="fw-cta" href="${dashboard.url}">가족 대시보드 열기 →</a>`;
+        <a class="fw-cta" href="${dashboard.url}">오렌지 카드 열기 →</a>`;
       return;
     }
     if (c.id === "fw-prayer" && showPrayerDashboard) {
