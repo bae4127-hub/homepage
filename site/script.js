@@ -56,6 +56,8 @@ async function loadPosts() {
   } catch (e) {
     posts = FALLBACK_POSTS; // 로컬 미리보기 등 fetch 불가 환경
   }
+  posts = [{ title: '[주보] 2026년 10월 18일 · 일어나라', link: 'weekly-261018.html', date: '2026-10-18', category: '주보', image: 'images/weekly-261018-1.jpg' }, ...posts.filter(p => p.link !== 'weekly-261018.html')];
+  if (todayKST() >= '2026-10-17' && todayKST() <= '2026-10-24') posts.unshift({ title: '[설교칼럼] 일어나라 | 사도행전 9:32–43', link: 'weekly-261018.html', date: '2026-10-18', category: '설교칼럼' });
   renderPosts(posts);
   let dashboards = [];
   try {
@@ -84,7 +86,7 @@ function renderFamilyWorship(posts, dashboards = []) {
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   })[char]);
-  const showPrayerDashboard = today >= "2026-10-10" && today <= "2026-10-17";
+  const showPrayerDashboard = today >= "2026-10-17" && today <= "2026-10-24";
   const corners = [
     { id: "fw-orange", match: "오렌지카드", badge: "🍊 오렌지카드", label: "가정예배 순서지" },
     { id: "fw-prayer", match: "선포기도", badge: "🌙 선포기도문", label: "밤기도회" },
@@ -107,9 +109,9 @@ function renderFamilyWorship(posts, dashboards = []) {
     if (c.id === "fw-prayer" && showPrayerDashboard) {
       el.innerHTML = `
         <span class="fw-badge">${c.badge}</span>
-        <span class="fw-label">26년 10월11일 주간</span>
-        <h3><a href="prayer-261011.html">선포기도문 / 26년 10월11일 주간</a></h3>
-        <a class="fw-cta" href="prayer-261011.html">선포기도문 열기 →</a>`;
+        <span class="fw-label">26년 10월18일 주간</span>
+        <h3><a href="prayer-261018.html">선포기도문 / 26년 10월18일 주간</a></h3>
+        <a class="fw-cta" href="prayer-261018.html">선포기도문 열기 →</a>`;
       return;
     }
     if (post) {
