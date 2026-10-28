@@ -246,21 +246,38 @@ async function loadNotice() {
 function renderModal(data, hideKey) {
   const root = document.getElementById("modal-root");
   if (!root) return;
+  const hasImage = Boolean(data.image);
   root.innerHTML = `
-    <div class="modal-overlay" id="site-modal">
-      <div class="modal-dialog">
-        <div class="modal-header">
-          <button class="modal-close" id="modal-close-btn">&times;</button>
-          ${data.image ? `<a href="${data.link || "#"}" target="_blank" rel="noopener" style="display:block;"><img src="${data.image}" alt="${data.title || ""}" class="modal-thumb" referrerpolicy="no-referrer"></a>` : ""}
-        </div>
-        <div class="modal-body">
-          <h3>${data.title}</h3>
-          ${data.description ? `<p>${data.description}</p>` : ""}
-          <a href="${data.link || "#"}" target="_blank" rel="noopener" class="btn-primary" id="modal-cta-btn">${data.linkText || "자세히 보기"}</a>
-        </div>
+    <div class="modal-overlay" id="site-modal" role="dialog" aria-modal="true" aria-label="${data.title || '안내'}">
+      <div class="modal-dialog ${hasImage ? 'has-poster' : 'text-only'}">
+        <button class="modal-close" id="modal-close-btn" aria-label="닫기" title="닫기">&times;</button>
+        ${hasImage ? `
+          <div class="modal-poster-wrap">
+            <a href="${data.link || "#"}" target="_blank" rel="noopener" class="modal-poster-link" title="${data.title || ''}">
+              <img src="${data.image}" alt="${data.title || ""}" class="modal-poster-img" referrerpolicy="no-referrer">
+            </a>
+          </div>
+        ` : `
+          <div class="modal-text-content">
+            ${data.badge ? `<span class="modal-badge-tag">${data.badge}</span>` : ""}
+            <h3>${data.title}</h3>
+            ${data.description ? `<p>${data.description}</p>` : ""}
+          </div>
+        `}
+        ${data.link ? `
+          <div class="modal-cta-wrap">
+            <a href="${data.link}" target="_blank" rel="noopener" class="modal-btn-cta" id="modal-cta-btn">
+              <span>${data.linkText || "초대글 및 콘서트 안내 보기"}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        ` : ""}
         <div class="modal-footer">
-          <label><input type="checkbox" id="modal-hide-chk"> 7일간 보지 않기</label>
-          <button id="modal-close-txt">닫기</button>
+          <label class="modal-hide-opt">
+            <input type="checkbox" id="modal-hide-chk">
+            <span>7일간 보지 않기</span>
+          </label>
+          <button type="button" id="modal-close-txt" class="modal-btn-close">닫기</button>
         </div>
       </div>
     </div>
@@ -281,7 +298,11 @@ function renderModal(data, hideKey) {
 
   document.getElementById("modal-close-btn").onclick = closeModal;
   document.getElementById("modal-close-txt").onclick = closeModal;
-  document.getElementById("modal-cta-btn").onclick = closeModal;
+  const ctaBtn = document.getElementById("modal-cta-btn");
+  if (ctaBtn) ctaBtn.onclick = closeModal;
+  modal.onclick = (e) => {
+    if (e.target === modal) closeModal();
+  };
 }
 
 loadNotice();
