@@ -254,7 +254,7 @@ function renderModal(data, hideKey) {
         ${hasImage ? `
           <div class="modal-poster-wrap">
             <a href="${data.link || "#"}" target="_blank" rel="noopener" class="modal-poster-link" title="${data.title || ''}">
-              <img src="${data.image}" alt="${data.title || ""}" class="modal-poster-img" referrerpolicy="no-referrer">
+              <img src="${data.image}" alt="${data.title || ""}" class="modal-poster-img" referrerpolicy="no-referrer" onerror="if(!this.dataset.fallbackDone){this.dataset.fallbackDone='1';this.src='https://mblogthumb-phinf.pstatic.net/MjAyNjEwMjFfMTM0/MDAxNzkyNTU4NDkwMjg4.0eAunRYWcm46HorN8Uwcub2VcsGkTWCNVs3aVQ0A6ukg.FsYDkOjT9l8ONuiAuyyqz6Z-TzTK81gmJ-yma8lWjZog.JPEG/KakaoTalk_20261010_110239587.jpg?type=w800';}">
             </a>
           </div>
         ` : `
