@@ -56,8 +56,6 @@ async function loadPosts() {
   } catch (e) {
     posts = FALLBACK_POSTS; // 로컬 미리보기 등 fetch 불가 환경
   }
-  posts = [{ title: '[주보] 2026년 10월 18일 · 일어나라', link: 'weekly-261018.html', date: '2026-10-18', category: '주보', image: 'images/weekly-261018-1.jpg' }, ...posts.filter(p => p.link !== 'weekly-261018.html')];
-  if (todayKST() >= '2026-10-17' && todayKST() <= '2026-10-24') posts.unshift({ title: '[설교칼럼] 일어나라 | 사도행전 9:32–43', link: 'weekly-261018.html', date: '2026-10-18', category: '설교칼럼' });
   renderPosts(posts);
   let dashboards = [];
   try {
@@ -212,7 +210,7 @@ async function loadNotice() {
 
     // 배너와 모달 분리
     const modals = visible.filter(n => n.isModal);
-    const banners = visible.filter(n => !n.isModal);
+    const banners = visible;
 
     // 1. 일반 배너 렌더링
     if (banners.length > 0) {
@@ -253,7 +251,7 @@ function renderModal(data, hideKey) {
       <div class="modal-dialog">
         <div class="modal-header">
           <button class="modal-close" id="modal-close-btn">&times;</button>
-          ${data.image ? `<img src="${data.image}" alt="" class="modal-thumb" referrerpolicy="no-referrer">` : ""}
+          ${data.image ? `<a href="${data.link || "#"}" target="_blank" rel="noopener" style="display:block;"><img src="${data.image}" alt="${data.title || ""}" class="modal-thumb" referrerpolicy="no-referrer"></a>` : ""}
         </div>
         <div class="modal-body">
           <h3>${data.title}</h3>
@@ -287,6 +285,12 @@ function renderModal(data, hideKey) {
 }
 
 loadNotice();
+
+// 최상단 띠배너: 행사 날짜(2026-11-08)가 지나면 자동으로 숨김
+const topBar = document.getElementById("top-announcement");
+if (topBar && todayKST() > "2026-11-08") {
+  topBar.style.display = "none";
+}
 
 // ===== 스크롤 등장 애니메이션 =====
 // 화면에 들어오는 요소에 .visible을 붙여 부드럽게 떠오르게 함 (style.css의 .reveal 참고)
