@@ -108,7 +108,12 @@ $items | ConvertTo-Json -Depth 5 | Set-Content -Path $OutPosts -Encoding UTF8
 Write-Host "Saved $($items.Count) posts to posts.json"
 
 Write-Host "Fetching YouTube RSS..."
-$ytRssStr = (Invoke-WebRequest -Uri "https://www.youtube.com/feeds/videos.xml?channel_id=UC7OCid3xzRUptzmHUvA7B4g" -Headers @{"User-Agent"="Mozilla/5.0"} -UseBasicParsing).Content
+$ytRssStr = ""
+try {
+    $ytRssStr = (Invoke-WebRequest -Uri "https://www.youtube.com/feeds/videos.xml?channel_id=UC7OCid3xzRUptzmHUvA7B4g" -Headers @{"User-Agent"="Mozilla/5.0"} -UseBasicParsing).Content
+} catch {
+    Write-Host "YouTube RSS Warning: $_"
+}
 
 $videos = @()
 $ytMatches = [regex]::Matches($ytRssStr, "<entry>([\s\S]*?)</entry>")
