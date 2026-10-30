@@ -31,19 +31,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        if: github.event_name != 'push'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      - name: Test YouTube feed recovery
+        run: node --test site/scripts/youtube-feed.test.mjs
+
       - name: Fetch Latest Feeds
-        if: github.event_name != 'push'
         run: |
           cd site
           node scripts/fetch-feeds.mjs
 
       - name: Commit and Push changes
-        if: github.event_name != 'push'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -61,3 +61,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+

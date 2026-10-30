@@ -2,10 +2,10 @@
 // GitHub Actions가 매일 실행 (.github/workflows/update.yml)
 // 로컬 테스트: node scripts/fetch-feeds.mjs
 
-import { writeFile, mkdir } from "node:fs/promises";
+import { writeFile, readFile, mkdir } from "node:fs/promises";
+import { findLatestSermon } from "./youtube-feed.mjs";
 
 const RSS_URL = "https://rss.blog.naver.com/wormwood79.xml";
-const YT_RSS_URL = "https://www.youtube.com/feeds/videos.xml?channel_id=UC7OCid3xzRUptzmHUvA7B4g";
 const OUT_FILE = "data/posts.json";
 const VIDEO_FILE = "data/latest-video.json";
 const MAX_POSTS = 30;
@@ -124,36 +124,27 @@ async function updateFeeds() {
     console.warn("블로그 RSS 수집 실패 — 기존 posts.json을 보존합니다.");
   }
 
-  // 2. 유튜브 최신 주일설교 수집 (간헐적 500에 안전하게 대응)
-  console.log("유튜브 RSS 수집 시작...");
+  // 2. 유튜브 최신 주일설교: RSS 실패 시 공개 채널 페이지로 대체
+  console.log("유튜브 최신 주일설교 수집 시작...");
   try {
-    const ytRes = await fetchWithRetry(YT_RSS_URL, { headers: { "User-Agent": USER_AGENT } }, 3, 2000);
-    if (ytRes && ytRes.ok) {
-      const ytXml = await ytRes.text();
-      const videos = [...ytXml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)].map(m => {
-        const e = m[1];
-        return {
-          videoId: pick(e, "yt:videoId"),
-          title: pick(e, "title"),
-          date: (pick(e, "published") || "").slice(0, 10),
-        };
-      }).filter(v => v.videoId);
-
-      const latest =
-        videos.find(v => v.title.includes("주일예배")) ||
-        videos.find(v => !v.title.includes("#shorts")) ||
-        videos[0];
-
-      if (latest) {
-        await writeFile(VIDEO_FILE, JSON.stringify(latest, null, 2), "utf8");
-        console.log(`완료: ${VIDEO_FILE} ← ${latest.date} "${latest.title}"`);
-      }
+    let previous = null;
+    try { previous = JSON.parse(await readFile(VIDEO_FILE, "utf8")); } catch (error) {
+      if (error.code !== "ENOENT") console.warn("기존 영상 데이터 읽기 실패:", error.message);
+    }
+    const { latest, source } = await findLatestSermon(async url => {
+      const response = await fetchWithRetry(url, { headers: { "User-Agent": USER_AGENT } }, 2, 1000);
+      return response ? response.text() : null;
+    }, previous);
+    if (latest) {
+      await writeFile(VIDEO_FILE, JSON.stringify(latest, null, 2), "utf8");
+      console.log(`완료: ${VIDEO_FILE} ← ${latest.date} "${latest.title}" (출처: ${source})`);
     } else {
-      console.warn("유튜브 RSS 응답 없음 (간헐적 500 등) — 기존 latest-video.json을 보존합니다.");
+      console.warn("::warning title=유튜브 자동 갱신 실패::RSS와 채널 페이지에서 유효한 최신 설교를 확인하지 못했습니다. 기존 latest-video.json을 보존합니다.");
     }
   } catch (ytErr) {
-    console.warn("유튜브 영상 수집 중 예외 발생 (기존 latest-video.json 보존):", ytErr.message);
+    console.warn("::warning title=유튜브 자동 갱신 실패::기존 latest-video.json 보존: " + ytErr.message);
   }
 }
 
 updateFeeds();
+
