@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="기도의 시작과 마침을 같은 종소리로 알리는 타이머">
+  <meta name="theme-color" content="#f1f2eb">
+  <title>기도 타이머 | 청라강성교회</title>
+  <link rel="canonical" href="https://cnksch.or.kr/prayer-timer/">
+  <link rel="icon" href="../images/favicon.png">
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+      color: #222f28;
+      background: #f1f2eb;
+      --muted: #536058;
+      --green: #234537;
+      --border: #d4dad2;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; }
+    main { width: min(100% - 3rem, 64rem); margin-inline: auto; padding-block: clamp(2.5rem, 8vw, 6rem); }
+    h1, h2, p { margin: 0; }
+    h1 { font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -.065em; line-height: 1.15; }
+    h2 { font-size: 1.2rem; letter-spacing: -.035em; }
+    header { margin-bottom: 1.9rem; }
+    .home-link { display: inline-block; padding-block: .35rem; margin-bottom: .55rem; color: var(--green); font-size: .9rem; font-weight: 650; text-underline-offset: .18em; }
+    header p { color: var(--muted); margin-top: .7rem; line-height: 1.65; }
+    .timer { display: grid; grid-template-columns: 1.08fr 1fr; gap: .875rem; }
+    .display, .settings { border-radius: 1.55rem; }
+    .display {
+      color: #f4f4e9;
+      background: radial-gradient(ellipse at 50% 40%, #305644, #18352b 75%);
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      padding: 1.7rem 1rem;
+      min-height: 24rem;
+    }
+    .dial {
+      --progress: 0%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      isolation: isolate;
+      width: clamp(12.75rem, 25vw, 16rem);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px solid #718e7e;
+    }
+    .dial::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      z-index: -1;
+      border-radius: inherit;
+      background: conic-gradient(#c9d496 var(--progress), transparent 0);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 2px));
+    }
+    .dial-text { text-align: center; }
+    #clock {
+      display: block;
+      font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+      font-size: clamp(2.6rem, 5.4vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -.07em;
+      font-variant-numeric: tabular-nums;
+    }
+    #status { margin-top: .65rem; font-size: .9rem; color: #d7e4d7; }
+    .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; margin-top: 1.25rem; }
+    button {
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+      min-height: 2.75rem;
+      border-radius: .75rem;
+      border: 1px solid var(--border);
+      color: var(--green);
+      background: #fff;
+    }
+    button:focus-visible { outline: 2px solid #50743e; outline-offset: 3px; }
+    .controls button {
+      color: inherit;
+      background: transparent;
+      border-color: #718e7e;
+      padding-inline: .85rem;
+      font-size: .875rem;
+    }
+    .controls button:focus-visible { outline-color: #c9d496; }
+    .controls button:hover:enabled { background: #3e5e50; }
+    .controls button:disabled { opacity: .5; cursor: default; }
+    .settings {
+      background: #fcfcf8;
+      border: 1px solid var(--border);
+      padding: clamp(1.2rem, 3vw, 1.8rem);
+      display: grid;
+      align-content: center;
+    }
+    .presets {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .55rem;
+      margin-top: .9rem;
+    }
+    .presets button { min-height: 3rem; }
+    .presets button:hover { background: #edf3e8; border-color: #8ea68d; }
+    .presets button[aria-pressed="true"] { color: #fff; background: var(--green); border-color: var(--green); }
+    .presets span { font-size: .82em; font-weight: 500; }
+    .note, #audio-message { color: var(--muted); font-size: .875rem; line-height: 1.55; }
+    .note { margin-top: .85rem; }
+    #audio-message { margin-top: .5rem; color: #8a3829; }
+    @media (max-width: 44rem) {
+      main { width: min(100% - 1.5rem, 30rem); padding-block: 1.8rem; }
+      header { margin-bottom: 1.15rem; padding-inline: .35rem; }
+      .timer { grid-template-columns: 1fr; }
+      .display { min-height: 0; padding: 1.4rem .75rem; }
+      .settings { padding: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="home-link" href="../">청라강성교회 홈페이지</a>
+      <h1>기도 타이머</h1>
+      <p>시간을 누르면 종소리와 함께 기도가 시작됩니다.</p>
+    </header>
+    <div class="timer">
+      <section class="display" aria-label="타이머 조작">
+        <div class="dial">
+          <div class="dial-text">
+            <div id="clock" role="timer" aria-label="남은 시간">00:00</div>
+            <p id="status" role="status">기도 준비</p>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="preview" type="button">종소리 듣기</button>
+          <button id="stop" type="button" disabled>중지</button>
+        </div>
+      </section>
+      <section class="settings" aria-labelledby="duration-heading">
+        <h2 id="duration-heading">기도 시간</h2>
+        <div class="presets" id="presets"></div>
+        <p class="note">종료 종소리를 들으려면 화면을 켜 두세요.</p>
+        <p id="audio-message" role="alert" hidden></p>
+      </section>
+    </div>
+  </main>
+  <audio id="bell" src="bell.mp3" preload="auto"></audio>
+  <script>
+    "use strict";
+
+    const durations = [1, 2, 3, 5, 10, 15, 20, 30, 40, 50, 60, 90, 120];
+    const bell = document.querySelector("#bell");
+    const clock = document.querySelector("#clock");
+    const dial = document.querySelector(".dial");
+    const statusLabel = document.querySelector("#status");
+    const presets = document.querySelector("#presets");
+    const preview = document.querySelector("#preview");
+    const stop = document.querySelector("#stop");
+    const audioMessage = document.querySelector("#audio-message");
+
+    let deadline = 0;
+    let durationMs = 0;
+    let ticker;
+    let activePreset;
+    let audioRequest = 0;
+
+    for (const minutes of durations) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.minutes = String(minutes);
+      button.setAttribute("aria-pressed", "false");
+      button.append(String(minutes), " ");
+      const unit = document.createElement("span");
+      unit.textContent = "분";
+      button.append(unit);
+      presets.append(button);
+    }
+
+    function renderTime(milliseconds) {
+      const total = Math.ceil(milliseconds / 1000);
+      const hours = Math.floor(total / 3600);
+      const minutes = Math.floor(total / 60) % 60;
+      const seconds = total % 60;
+      const parts = hours ? [hours, minutes, seconds] : [minutes, seconds];
+      const time = parts.map(value => String(value).padStart(2, "0")).join(":");
+      if (clock.textContent !== time) clock.textContent = time;
+      const progress = durationMs ? 100 * (1 - milliseconds / durationMs) : 0;
+      dial.style.setProperty("--progress", Math.max(0, progress) + "%");
+    }
+
+    function silence() {
+      audioRequest += 1;
+      bell.pause();
+      bell.currentTime = 0;
+    }
+
+    async function playBell() {
+      silence();
+      const request = audioRequest;
+      audioMessage.hidden = true;
+      try {
+        await bell.play();
+      } catch {
+        if (request !== audioRequest) return;
+        audioMessage.textContent = "종소리를 재생할 수 없습니다. ‘종소리 듣기’로 소리를 확인하세요.";
+        audioMessage.hidden = false;
+      }
+    }
+
+    function updatePreview() {
+      const sounding = !bell.paused && !bell.ended;
+      preview.textContent = sounding ? "종소리 끄기" : "종소리 듣기";
+    }
+
+    function clearCountdown() {
+      clearInterval(ticker);
+      deadline = 0;
+      stop.disabled = true;
+      activePreset?.setAttribute("aria-pressed", "false");
+      activePreset = undefined;
+    }
+
+    function tick() {
+      if (!deadline) return;
+      const remaining = Math.max(0, deadline - Date.now());
+      renderTime(remaining);
+      if (remaining > 0) return;
+
+      clearCountdown();
+      statusLabel.textContent = "기도 종료";
+      void playBell();
+    }
+
+    presets.addEventListener("click", event => {
+      const button = event.target.closest("button[data-minutes]");
+      if (!button) return;
+
+      clearCountdown();
+      activePreset = button;
+      activePreset.setAttribute("aria-pressed", "true");
+      durationMs = Number(button.dataset.minutes) * 60_000;
+      deadline = Date.now() + durationMs;
+      stop.disabled = false;
+      statusLabel.textContent = "기도 중";
+      renderTime(durationMs);
+      void playBell();
+      ticker = setInterval(tick, 200);
+    });
+
+    stop.addEventListener("click", () => {
+      clearCountdown();
+      silence();
+      durationMs = 0;
+      renderTime(0);
+      statusLabel.textContent = "기도 중지";
+    });
+
+    preview.addEventListener("click", () => {
+      if (bell.paused || bell.ended) void playBell();
+      else silence();
+    });
+
+    for (const event of ["play", "pause", "ended"]) {
+      bell.addEventListener(event, updatePreview);
+    }
+    document.addEventListener("visibilitychange", tick);
+    window.addEventListener("pageshow", tick);
+  </script>
+</body>
+</html>
